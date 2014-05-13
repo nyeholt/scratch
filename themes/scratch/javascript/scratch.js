@@ -85,39 +85,39 @@
 
 				var currentParent = $(dropped.parent());
 
-				if (currentParent[0] === this) {
-					return;
+				if (currentParent[0] !== this) {
+					var oldPosition = dropped.offset();
+					dropped.appendTo(droppedOn);
+					var newPosition = dropped.offset();
+
+					//calculate correct position offset
+					var leftOffset = null;
+					var topOffset = null;
+
+					if (oldPosition.left > newPosition.left) {
+						leftOffset = (oldPosition.left - newPosition.left);
+					} else {
+						leftOffset = -(newPosition.left - oldPosition.left);
+					}
+
+					if (oldPosition.top > newPosition.top) {
+						topOffset = (oldPosition.top - newPosition.top);
+					} else {
+						topOffset = -(newPosition.top - oldPosition.top);
+					}
+
+					//instantly offsetting the div to it current position
+					ui.draggable.animate({
+						left: '+=' + leftOffset,
+						top: '+=' + topOffset,
+					}, 0);
+
 				}
 
-				var oldPosition = dropped.offset();
-				dropped.appendTo(droppedOn);
-				var newPosition = dropped.offset();
-				
-				//calculate correct position offset
-				var leftOffset = null;
-				var topOffset = null;
-
-				if (oldPosition.left > newPosition.left) {
-					leftOffset = (oldPosition.left - newPosition.left);
-				} else {
-					leftOffset = -(newPosition.left - oldPosition.left);
-				}
-
-				if (oldPosition.top > newPosition.top) {
-					topOffset = (oldPosition.top - newPosition.top);
-				} else {
-					topOffset = -(newPosition.top - oldPosition.top);
-				}
-
-				//instantly offsetting the div to it current position
-				ui.draggable.animate({
-					left: '+=' + leftOffset,
-					top: '+=' + topOffset,
-				}, 0);
-				
 				var itch = dropped.data('itch');
 				itch.position = [parseInt(dropped.css('top')), parseInt(dropped.css('left'))];
 				itch.tile = droppedOn.attr('id');
+				
 				Scratch.save();
 
 				zoomer.panzoom('enable');
@@ -295,7 +295,10 @@
 			var target = $(e.target);
 			if (!target.is('.basictile')) {
 				console.log("Context menu on a non-basictile element... baddd");
-				return;
+				e.preventDefault();
+				e.stopPropagation();
+				e.stopImmediatePropagation();
+				return false;
 			}
 			var offsetPos = [];
 			if (e.offsetX === undefined) {

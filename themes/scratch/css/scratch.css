@@ -24,7 +24,9 @@ Overrides
 	position: absolute;
 	width: 100px;
 	height: 100px;
-	border: 1px solid #00f;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #ccc;
 }
 
 #a {
