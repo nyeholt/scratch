@@ -246,11 +246,30 @@
 			}
 		}
 	}
+	
+	Scratch.currentTransform = function () {
+		var values = [1, 0, 0, 0, 0, 0];
+		var transform = zoomer.css('transform');
+		if (transform && transform !== "none") {
+			values = transform.match(/-?[0-9\.]+/g);
+		}
+		return values;
+	}
+	
+	Scratch.hardKill = function () {
+		if (confirm('Sure?')) {
+			this.store.remove('scratch_state');
+			this.store.remove('itches');
+			location.reload();
+		}
+	}
 
 	window.Scratch = Scratch;
 
 
 	$(function() {
+		var lastContext = null;
+		
 		zoomer = $('.panzoom');
 		zoomer.panzoom({
 			$zoomIn: $("#zoomin"),
@@ -272,6 +291,57 @@
 //			console.log("pan-zoom end");
 		})
 
+		$(document).on('contextmenu', '.basictile', function (e) {
+			var target = $(e.target);
+			if (!target.is('.basictile')) {
+				console.log("Context menu on a non-basictile element... baddd");
+				return;
+			}
+			var offsetPos = [];
+			if (e.offsetX === undefined) {
+				var offx = e.pageX - target.offset().left;
+				var offy = e.pageY - target.offset().top;
+				offsetPos = [offy, offx];
+			} else {
+				offsetPos = [e.offsetY, e.offsetX];
+			}
+
+			var transform = Scratch.currentTransform();
+			if (transform[0] != 1) {
+				var newX = offsetPos[0] ? offsetPos[0] / transform[0] : 0;
+				var newY = offsetPos[1] ? offsetPos[1] / transform[0] : 0;
+				offsetPos = [newY, newX];
+			}
+			
+			lastContext = {
+				element: '#' + target.attr('id'),
+				position: offsetPos
+			};
+		});
+
+		$.contextMenu({
+			selector: '.basictile', 
+			callback: function(key, options) {
+				if (!lastContext) {
+					return;
+				}
+				if (options.items && options.items[key] && options.items[key].execute) {
+					options.items[key].execute.call(this, options);
+				}
+			},
+			items: {
+				"newItch": {
+					name: 'Add an itch', 
+					execute: function (options) {
+						Scratch.addItch($(lastContext.element), lastContext.position);
+					}
+				}
+			}
+		});
+
+		$('.basictile').on('click', function(e){
+			console.log('clicked', this);
+		})
 
 		Scratch.init();
 	})
