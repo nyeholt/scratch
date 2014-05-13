@@ -1,0 +1,64 @@
+/**
+Overrides
+*/
+.ui-resizable {
+	position: absolute;
+}
+
+#container {
+	position: absolute;
+	width: 80%;
+	border: 1px solid #888;
+	height: 90%;
+	overflow: hidden;
+}
+
+.basictile {
+	width: 500px;
+	height: 500px;
+	border: 1px solid #000;
+	position: absolute;
+}
+
+.itch {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	border: 1px solid #00f;
+}
+
+#a {
+	top: 0px;
+	left: 0px;
+}
+
+#b {
+	top: 0px;
+	left: 500px;
+}
+
+#itch1 {
+	top: 10px;
+	left: 10px;
+}
+#itch2 {
+	top: 400px;
+	left: 100px;
+}
+#itch3 {
+	top: 500px;
+	left: 500px;
+}
+
+#itch4 {
+	top: 10px;
+	left: 10px;
+}
+#itch5 {
+	top: 400px;
+	left: 100px;
+}
+#itch6 {
+	top: 500px;
+	left: 5000px;
+}
