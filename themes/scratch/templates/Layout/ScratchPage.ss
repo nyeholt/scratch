@@ -7,11 +7,13 @@
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-2.0.0.min.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
 		<script src="themes/scratch/javascript/jquery.panzoom.min.js"></script>
-		
 		<script src="themes/scratch/javascript/jquery-context/jquery.contextMenu.js"></script>
+		<script src="themes/scratch/javascript/jquery.gdb.js?v1.2.1"></script>
 
 		<script src="themes/scratch/javascript/scratch.js"></script>
 		<script src="themes/scratch/javascript/scratch-local-storage.js"></script>
+		
+		<script src="themes/scratch/javascript/scratch-itch.js"></script>
 		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />
@@ -26,5 +28,14 @@
 			
 		</div>
 		</div>
+		
+		<script type="text/template" id="GeneralSettingsForm">
+		<form class="generalSettingsForm">
+			<div>
+			<label>Background</label>
+			<input type="text" data-bindto="itchOptions.backgroundColor" />
+			</div>
+		</form>
+		</script>
 	</body>
 </html>

@@ -191,12 +191,16 @@
 			}
 		}
 
-		var itch = $('<div>').addClass(ITCH_CLASS).css({
-			top: pos[0],
-			left: pos[1],
-			width: size[0],
-			height: size[1]
-		}).appendTo(to);
+		var itch = $('<div>')
+			.addClass(ITCH_CLASS)
+			.css({
+				top: pos[0],
+				left: pos[1],
+				width: size[0],
+				height: size[1]
+			})
+			.addClass('itch-type-' + type)
+			.appendTo(to);
 		
 		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options"></div>').append('<div class="itch-body"></div>');
 
@@ -225,11 +229,10 @@
 				id: this.nextItchId(),
 				tile: $(to).attr('id'),
 				position: pos,
-				type: '',
+				type: type,
 				size: size,
-				data: {
-
-				}
+				options: {},
+				data: {}
 			};
 		}
 
@@ -240,6 +243,10 @@
 		if (doSave) {
 			this.save();
 		}
+
+//		$(document).trigger('itchCreated');
+		$(itch).trigger('itchCreated');
+		$(itch).trigger('renderItch');
 		
 		return itch;
 	};
@@ -282,6 +289,13 @@
 			location.reload();
 		}
 	}
+	
+	$(document).on('renderItch', '.itch', function () {
+		var data = $(this).data('itch');
+		if (data.options.backgroundColor) {
+			$(this).css('background-color', data.options.backgroundColor);
+		}
+	});
 
 	window.Scratch = Scratch;
 
@@ -353,9 +367,9 @@
 			},
 			items: {
 				"newItch": {
-					name: 'Add an itch', 
+					name: 'Add Itch', 
 					execute: function (options) {
-						Scratch.addItch($(lastContext.element), lastContext.position);
+						Scratch.addItch($(lastContext.element), lastContext.position, 'Itch');
 					}
 				}
 			}
@@ -373,7 +387,27 @@
 				"options": {
 					name: 'Options', 
 					execute: function (options) {
-						alert("show options");
+						var itch = $(this);
+						
+						var form = $('#GeneralSettingsForm').html();
+						itch.find('.itch-body').html(form);
+						
+						var itchData = itch.data('itch');
+						GDB({itchOptions: itchData.options})
+						
+						var submitter = itch.find('.generalSettingsForm');
+
+						submitter.submit(function (e) {
+							e.preventDefault();
+							Scratch.save();
+							submitter.remove();
+							delete submitter;
+							
+							$(itch).trigger('renderItch');
+							
+							return false;
+						});
+						
 					}
 				},
 				"delete": {

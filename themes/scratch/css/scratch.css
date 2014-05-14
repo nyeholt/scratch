@@ -27,6 +27,7 @@ Overrides
 	background-color: #fff;
 	border-radius: 5px;
 	box-shadow: 0px 0px 10px #555;
+	overflow: hidden;
 }
 
 .itch-handle {
@@ -41,10 +42,11 @@ Overrides
 }
 
 .itch-body {
-	position: absolute;
-	top: 12px;
-	width: 99%;
+	
+	width: 95%;
 	margin: 0px auto;
+	margin-top: 20px;
+	min-height: 70%;
 }
 
 .itch-options {
