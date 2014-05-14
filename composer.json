@@ -6,7 +6,8 @@
 		"silverstripe/cms": "3.1.*",
 		"silverstripe/framework": "3.1.*",
 		"silverstripe-themes/simple": "*",
-		"silverstripe/sqlite3": "dev-master"
+		"silverstripe/sqlite3": "dev-master",
+		"silverstripe/restrictedobjects": "dev-master"
 	},
 	"minimum-stability": "dev"
 }

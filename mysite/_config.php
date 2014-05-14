@@ -14,15 +14,15 @@ SS_Log::add_writer(new SS_LogFileWriter(SS_LOG_FILE), SS_Log::NOTICE, '<=');
 
 // This line set's the current theme. More themes can be
 // downloaded from http://www.silverstripe.com/themes/
-SSViewer::set_theme('simple');
+//SSViewer::set_theme('simple');
 
 // enable nested URLs for this site (e.g. page/sub-page/)
-SiteTree::enable_nested_urls();
+//SiteTree::enable_nested_urls();
 
-MySQLDatabase::set_connection_charset('utf8');
+//MySQLDatabase::set_connection_charset('utf8');
 
 // necessary for now
-SQLite3Database::$vacuum = false;
+//SQLite3Database::$vacuum = false;
 
 // Sets up relevant cache settings to prevent permission errors
 SS_Cache::add_backend('default', 'File', array(
@@ -41,3 +41,7 @@ $coreCache = Zend_Cache::factory(
 );
 
 Zend_Date::setOptions(array('cache' => $coreCache));
+
+Object::add_extension('Page', 'Restrictable');
+Object::add_extension('SiteConfig', 'Restrictable');
+Object::add_extension('Page', 'RestrictedPage');
