@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html>
 	<head>
 		<% base_tag %>
 		<title>My project</title>
@@ -18,7 +18,7 @@
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-context/jquery.contextMenu.css" />
 	</head>
 	<body>
-		<div class="controls">
+		<div id="controls">
 			<button id="zoomout" value="-">-</button><button id="resetzoom">0</button><button id="zoomin" value="+">+</button>
 		</div>
 		<div id="container">

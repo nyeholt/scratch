@@ -7,34 +7,62 @@ Overrides
 
 #container {
 	position: absolute;
-	width: 80%;
-	border: 1px solid #888;
-	height: 90%;
+	top: 0px;
+	left: 0px;
+	width: 99%;
+	height: 99%;
 	overflow: hidden;
 }
 
 .basictile {
 	width: 500px;
 	height: 500px;
-	border: 1px solid #000;
+	border: 1px solid #efefef;
 	position: absolute;
 }
 
 .itch {
+	z-index: 2;
 	position: absolute;
-	width: 100px;
-	height: 100px;
 	background-color: #fff;
 	border-radius: 5px;
-	box-shadow: 0px 0px 5px #ccc;
+	box-shadow: 0px 0px 10px #555;
+}
+
+.itch-handle {
+	position: absolute;
+	top: 2px;
+	left: 10%;
+	width: 80%;
+	margin: 0px auto;
+	height: 10px;
+	background-color: #eee;
+	cursor: move;
+}
+
+.itch-body {
+	position: absolute;
+	top: 12px;
+	width: 99%;
+	margin: 0px auto;
+}
+
+.itch-options {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 10px;
+	height: 10px;
+	background-color: #ddd;
 }
 
 #controls {
+	z-index: 1000;
 	position: absolute;
 	top: 10px;
 	right: 10px;
 	border: 1px solid #ccc;
 	width: 200px;
 	height: 100px;
-	background-color: rgba(255,255,255,0.3);
+	background-color: rgba(255,255,255,0.9);
 }

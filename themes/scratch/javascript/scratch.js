@@ -148,6 +148,15 @@
 		}
 	};
 
+	Scratch.deleteItch = function (id) {
+		var elem = $('.itch[data-id=' + id +']');
+		if (elem.length) {
+			delete this.ALL_ITCHES[id];
+			elem.remove();
+			this.save();
+		}
+	};
+
 	/**
 	 * 
 	 * @param mixed to
@@ -160,8 +169,8 @@
 	 */
 	Scratch.addItch = function (to, pos, type, existingData) {
 		// we've got existing data to work with
-		var size = [100, 100];
-		
+		var size = [400, 300];
+
 		if (arguments.length == 1 && to.id) {
 			existingData = to;
 			to = $('#' + existingData.tile);
@@ -188,9 +197,12 @@
 			width: size[0],
 			height: size[1]
 		}).appendTo(to);
+		
+		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options"></div>').append('<div class="itch-body"></div>');
 
 		// bind events
 		itch.draggable({
+			handle: '.itch-handle',
 			stop: function(event, ui) {
 				// note: This is handled in the drop handler above to prevent problems with the
 				// new parent elem not being tracked
@@ -214,7 +226,7 @@
 				tile: $(to).attr('id'),
 				position: pos,
 				type: '',
-				size: [100, 100],
+				size: size,
 				data: {
 
 				}
@@ -223,6 +235,7 @@
 
 		this.ALL_ITCHES[existingData.id] = existingData;
 		itch.data('itch', existingData);
+		itch.attr('data-id', existingData.id);
 		
 		if (doSave) {
 			this.save();
@@ -247,6 +260,12 @@
 		}
 	}
 	
+	// SOME UI HELPERS
+	/**
+	 * Get the currently applied UI transform by the zoomer
+	 * 
+	 * @returns 
+	 */
 	Scratch.currentTransform = function () {
 		var values = [1, 0, 0, 0, 0, 0];
 		var transform = zoomer.css('transform');
@@ -341,10 +360,35 @@
 				}
 			}
 		});
-
-		$('.basictile').on('click', function(e){
-			console.log('clicked', this);
-		})
+		
+		$.contextMenu({
+			selector: '.itch', 
+			callback: function(key, options) {
+				
+				if (options.items && options.items[key] && options.items[key].execute) {
+					options.items[key].execute.call(this, options);
+				}
+			},
+			items: {
+				"options": {
+					name: 'Options', 
+					execute: function (options) {
+						alert("show options");
+					}
+				},
+				"delete": {
+					name: "Delete",
+					execute: function (o) {
+						var id = $(this).attr('data-id');
+						if (id) {
+							if (confirm("Sure?")) {
+								Scratch.deleteItch(id);
+							}
+						}
+					}
+				}
+			}
+		});
 
 		Scratch.init();
 	})
