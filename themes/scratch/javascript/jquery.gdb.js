@@ -347,6 +347,7 @@
                 });
             };
 
+window.MONITORED = modelsToMonitor;
             //OBSERVE THE MODELS
             observeObjects(modelsToMonitor);
 

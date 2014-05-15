@@ -16,6 +16,7 @@
 		<script src="themes/scratch/javascript/scratch-local-storage.js"></script>
 		
 		<script src="themes/scratch/javascript/scratch-itch.js"></script>
+		<script src="themes/scratch/javascript/scratch-embed.js"></script>
 		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />
@@ -35,15 +36,21 @@
 		<form class="generalSettingsForm itchForm">
 			<div>
 			<label>Background</label>
-			<input type="text" data-bindto="itchOptions.backgroundColor" />
+			<input type="text" data-bindto="data.itchOptions.backgroundColor" />
 			</div>
 		</form>
 		</script>
 		
 		<script type="text/template" id="ItchEditForm">
 		<form class="itchEditForm itchForm">
-			<textarea data-bindto="itchData.content" rows="10"></textarea>
+			<textarea data-bindto="data.itchData.content" rows="10"></textarea>
 			<input type="submit" value="Done" />
+		</form>
+		</script>
+
+		<script type="text/template" id="EmbedEditForm">
+		<form class="embedEditForm itchForm">
+			<input type="url" data-bindto="data.itchData.url" rows="10" />
 		</form>
 		</script>
 	</body>

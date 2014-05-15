@@ -11,6 +11,7 @@
 	
 	var Scratch = {
 		store: null,
+		editingModel: {},
 		ALL_TILES: {},
 		ALL_ITCHES: {},
 		// what is our current itch ID?
@@ -18,7 +19,7 @@
 			itchId: 0
 		}
 	};
-
+	
 	Scratch.setStore = function (store) {
 		this.store = store;
 	}
@@ -37,7 +38,9 @@
 		if (itches) {
 			this.ALL_ITCHES = itches;
 		}
-		
+
+		GDB({data: Scratch.editingModel});
+
 		var origin = this.initOrigin();
 		this.loadTilesAround(origin);
 	};
@@ -371,6 +374,12 @@
 					execute: function (options) {
 						Scratch.addItch($(lastContext.element), lastContext.position, 'Itch');
 					}
+				},
+				'embed': {
+					name: "Embed",
+					execute: function (o) {
+						Scratch.addItch($(lastContext.element), lastContext.position, 'Embed');
+					}
 				}
 			}
 		});
@@ -392,7 +401,10 @@
 						itch.find('.itch-body').html(form);
 						
 						var itchData = itch.data('itch');
-						GDB({itchOptions: itchData.options})
+						
+						Scratch.editingModel.itchOptions = itchData.options;
+
+//						GDB({itchOptions: itchData.options})
 						
 						var submitter = itch.find('.generalSettingsForm');
 

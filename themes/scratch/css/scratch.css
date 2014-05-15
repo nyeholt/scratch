@@ -80,8 +80,8 @@ Overrides
 	background-color: rgba(255,255,255,0.9);
 }
 
-.itchForm {
-	
+.itchForm input {
+	width: 95%;
 }
 
 .itchEditForm textarea {
@@ -89,3 +89,4 @@ Overrides
 
 	height: 100%;
 }
+
