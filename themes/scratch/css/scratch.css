@@ -1,3 +1,8 @@
+body {
+	font-family: 'Arial', 'sans-serif';
+	font-size: 12px;
+}
+
 /**
 Overrides
 */
@@ -12,6 +17,7 @@ Overrides
 	width: 99%;
 	height: 99%;
 	overflow: hidden;
+	background-color: #aaa;
 }
 
 .basictile {
@@ -19,6 +25,7 @@ Overrides
 	height: 500px;
 	border: 1px solid #efefef;
 	position: absolute;
+	background-color: #fff;
 }
 
 .itch {
@@ -28,6 +35,10 @@ Overrides
 	border-radius: 5px;
 	box-shadow: 0px 0px 10px #555;
 	overflow: hidden;
+}
+
+.itch img {
+	width: 99%;
 }
 
 .itch-handle {
@@ -67,4 +78,14 @@ Overrides
 	width: 200px;
 	height: 100px;
 	background-color: rgba(255,255,255,0.9);
+}
+
+.itchForm {
+	
+}
+
+.itchEditForm textarea {
+	width: 100%;
+
+	height: 100%;
 }

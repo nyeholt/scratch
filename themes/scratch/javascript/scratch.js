@@ -376,11 +376,10 @@
 		});
 		
 		$.contextMenu({
-			selector: '.itch', 
+			selector: '.itch-handle', 
 			callback: function(key, options) {
-				
 				if (options.items && options.items[key] && options.items[key].execute) {
-					options.items[key].execute.call(this, options);
+					options.items[key].execute.call($(this).parents('.itch'), options);
 				}
 			},
 			items: {

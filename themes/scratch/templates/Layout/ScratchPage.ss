@@ -9,6 +9,8 @@
 		<script src="themes/scratch/javascript/jquery.panzoom.min.js"></script>
 		<script src="themes/scratch/javascript/jquery-context/jquery.contextMenu.js"></script>
 		<script src="themes/scratch/javascript/jquery.gdb.js?v1.2.1"></script>
+		
+		<script src="themes/scratch/javascript/markdown-0.6.1/markdown.js"></script>
 
 		<script src="themes/scratch/javascript/scratch.js"></script>
 		<script src="themes/scratch/javascript/scratch-local-storage.js"></script>
@@ -30,11 +32,18 @@
 		</div>
 		
 		<script type="text/template" id="GeneralSettingsForm">
-		<form class="generalSettingsForm">
+		<form class="generalSettingsForm itchForm">
 			<div>
 			<label>Background</label>
 			<input type="text" data-bindto="itchOptions.backgroundColor" />
 			</div>
+		</form>
+		</script>
+		
+		<script type="text/template" id="ItchEditForm">
+		<form class="itchEditForm itchForm">
+			<textarea data-bindto="itchData.content" rows="10"></textarea>
+			<input type="submit" value="Done" />
 		</form>
 		</script>
 	</body>
