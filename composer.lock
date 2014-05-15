@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "7204e6ec51ead37132be3715a71b81b9",
+    "hash": "e8dc8f881c2ae8b324d278f454bb15e9",
     "packages": [
         {
             "name": "composer/installers",
@@ -265,12 +265,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nyeholt/silverstripe-restrictedobjects.git",
-                "reference": "3e4c8e9a8d6106ba9eafcc685d7694d36ed6e116"
+                "reference": "3e3dade5a18c03fe4a571797f9e7bc287c6a7ff3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nyeholt/silverstripe-restrictedobjects/zipball/3e4c8e9a8d6106ba9eafcc685d7694d36ed6e116",
-                "reference": "3e4c8e9a8d6106ba9eafcc685d7694d36ed6e116",
+                "url": "https://api.github.com/repos/nyeholt/silverstripe-restrictedobjects/zipball/3e3dade5a18c03fe4a571797f9e7bc287c6a7ff3",
+                "reference": "3e3dade5a18c03fe4a571797f9e7bc287c6a7ff3",
                 "shasum": ""
             },
             "require": {
@@ -293,7 +293,7 @@
                 "permissions",
                 "silverstripe"
             ],
-            "time": "2014-02-06 10:42:22"
+            "time": "2014-05-14 03:29:17"
         },
         {
             "name": "silverstripe/sqlite3",
@@ -335,6 +335,43 @@
                 "sqlite3"
             ],
             "time": "2014-03-05 21:50:50"
+        },
+        {
+            "name": "silverstripe/webservices",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nyeholt/silverstripe-webservices.git",
+                "reference": "6544a55d46c8d33c0d0d8076cb323b6cf2323b0d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nyeholt/silverstripe-webservices/zipball/6544a55d46c8d33c0d0d8076cb323b6cf2323b0d",
+                "reference": "6544a55d46c8d33c0d0d8076cb323b6cf2323b0d",
+                "shasum": ""
+            },
+            "require": {
+                "silverstripe/cms": "3.1.*@dev",
+                "silverstripe/framework": "3.1.*@dev",
+                "silverstripe/multivaluefield": "dev-master"
+            },
+            "type": "silverstripe-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Marcus Nyeholt",
+                    "email": "marcus@silverstripe.com.au"
+                }
+            ],
+            "description": "A module for exposing SilverStripe service classes via web endpoints as webservices.",
+            "keywords": [
+                "silverstripe",
+                "webservices"
+            ],
+            "time": "2014-03-19 00:33:09"
         }
     ],
     "packages-dev": [
@@ -346,7 +383,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "silverstripe/sqlite3": 20,
-        "silverstripe/restrictedobjects": 20
+        "silverstripe/restrictedobjects": 20,
+        "silverstripe/webservices": 20
     },
     "platform": {
         "php": ">=5.3.2"
