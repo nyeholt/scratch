@@ -36,21 +36,21 @@
 		<form class="generalSettingsForm itchForm">
 			<div>
 			<label>Background</label>
-			<input type="text" data-bindto="data.itchOptions.backgroundColor" />
+			<input type="text" name="backgroundColor" />
 			</div>
 		</form>
 		</script>
 		
 		<script type="text/template" id="ItchEditForm">
 		<form class="itchEditForm itchForm">
-			<textarea data-bindto="data.itchData.content" rows="10"></textarea>
+			<textarea name="content" rows="10"></textarea>
 			<input type="submit" value="Done" />
 		</form>
 		</script>
 
 		<script type="text/template" id="EmbedEditForm">
 		<form class="embedEditForm itchForm">
-			<input type="url" data-bindto="data.itchData.url" rows="10" />
+			<input type="url" name="url" rows="10" />
 		</form>
 		</script>
 	</body>

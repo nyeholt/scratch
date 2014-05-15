@@ -16,13 +16,13 @@
 		itch.find('.itch-body').html(form);
 
 		var itchData = itch.data('itch');
-		
-		Scratch.editingModel.itchData = itchData.data;
-
 		var submitter = itch.find('.embedEditForm');
+		Scratch.bindToForm(itchData.data, submitter);
 
 		submitter.submit(function (e) {
 			e.preventDefault();
+			
+			Scratch.loadFromForm(itchData.data, submitter);
 			Scratch.save();
 			submitter.remove();
 			delete submitter;

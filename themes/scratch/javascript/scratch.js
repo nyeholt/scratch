@@ -11,7 +11,6 @@
 	
 	var Scratch = {
 		store: null,
-		editingModel: {},
 		ALL_TILES: {},
 		ALL_ITCHES: {},
 		// what is our current itch ID?
@@ -19,7 +18,7 @@
 			itchId: 0
 		}
 	};
-	
+
 	Scratch.setStore = function (store) {
 		this.store = store;
 	}
@@ -38,9 +37,7 @@
 		if (itches) {
 			this.ALL_ITCHES = itches;
 		}
-
-		GDB({data: Scratch.editingModel});
-
+		
 		var origin = this.initOrigin();
 		this.loadTilesAround(origin);
 	};
@@ -59,12 +56,20 @@
 
 	Scratch.addTile = function(relativeElem, relativePos) {
 		var currentPos = {top: 0, left: 0};
+		var newRelPos = [0,0];
 		if (relativeElem) {
 			// horrible hack, but works around the issue of the parent webkit transform
 			currentPos  = {
 				top: parseInt($(relativeElem).css('top')),
 				left: parseInt($(relativeElem).css('left')),
 			}
+			// horrible hack to determine a y/x position relative to origin
+			var relativeToOrigin = relativeElem.attr('id').split('_');
+			var relTop = parseInt(relativeToOrigin[0]);
+			var relLeft = parseInt(relativeToOrigin[1]);
+			
+			newRelPos[0] = relTop + relativePos[0];
+			newRelPos[1] = relLeft + relativePos[1];
 		}
 
 		var newTilePos = {
@@ -72,12 +77,14 @@
 			left: currentPos.left + (TILE_SIZE * relativePos[1])
 		};
 
-		var key = newTilePos.top + '_' + newTilePos.left;
+		var key = newRelPos[0] + '_' + newRelPos[1];
 
 		// already loaded?
 		if (Scratch.ALL_TILES[key]) {
 			return;
 		}
+
+		
 
 		var newTile = $('<div>').addClass(TILE_CLASS).attr('id', key).css(newTilePos).appendTo(CONTAINER);
 
@@ -205,7 +212,7 @@
 			.addClass('itch-type-' + type)
 			.appendTo(to);
 		
-		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options"></div>').append('<div class="itch-body"></div>');
+		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
 
 		// bind events
 		itch.draggable({
@@ -293,6 +300,22 @@
 		}
 	}
 	
+	Scratch.bindToForm = function(data, form) {
+		for (var key in data) {
+			var input = form.find('[name=' + key +']');
+			if (input.length) {
+				input.val(data[key]);
+			}
+		}
+	}
+	
+	Scratch.loadFromForm = function (data, form) {
+		var inputs = form.find('[name]');
+		inputs.each(function () {
+			data[this.name] = $(this).val();
+		})
+	}
+	
 	$(document).on('renderItch', '.itch', function () {
 		var data = $(this).data('itch');
 		if (data.options.backgroundColor) {
@@ -322,7 +345,6 @@
 		});
 
 		$(zoomer).on('panzoomend', function(e) {
-			console.log(e);
 			Scratch.loadTilesAround($(e.target));
 //			console.log("pan-zoom end");
 		})
@@ -402,14 +424,12 @@
 						
 						var itchData = itch.data('itch');
 						
-						Scratch.editingModel.itchOptions = itchData.options;
-
-//						GDB({itchOptions: itchData.options})
-						
 						var submitter = itch.find('.generalSettingsForm');
+						Scratch.bindToForm(itchData.options, submitter);
 
 						submitter.submit(function (e) {
 							e.preventDefault();
+							Scratch.loadFromForm(itchData.options, submitter);
 							Scratch.save();
 							submitter.remove();
 							delete submitter;
