@@ -373,6 +373,10 @@
 			return false;
 		});
 	};
+	
+	Scratch.loading = function (elem) {
+		elem.html('<div class="ajax-loader"><img src="themes/scratch/images/712.png" /></div>');
+	}
 
 	$(document).on('renderItch', '.itch', function() {
 		var data = $(this).data('itch');
@@ -481,20 +485,19 @@
 				}
 				if (options.items && options.items[key] && options.items[key].execute) {
 					options.items[key].execute.call(this, options);
+				} else {
+					Scratch.addItch($(lastContext.element), lastContext.position, options.items[key].name);
 				}
 			},
 			items: {
 				"newItch": {
-					name: 'Itch',
-					execute: function(options) {
-						Scratch.addItch($(lastContext.element), lastContext.position, 'Itch');
-					}
+					name: 'Itch'
 				},
 				'embed': {
-					name: "Embed",
-					execute: function(o) {
-						Scratch.addItch($(lastContext.element), lastContext.position, 'Embed');
-					}
+					name: "Embed"
+				},
+				'rss': {
+					name: "RSS"
 				}
 			}
 		});

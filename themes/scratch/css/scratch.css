@@ -58,6 +58,14 @@ Overrides
 	margin: 0px auto;
 	margin-top: 20px;
 	min-height: 70%;
+	max-height: 95%;
+	overflow: auto;
+}
+
+.ajax-loader {
+	width: 100%;
+	margin: 0px auto;
+	text-align: center;
 }
 
 .itch-options {

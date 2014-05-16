@@ -21,6 +21,7 @@
 		
 		<script src="themes/scratch/javascript/scratch-itch.js"></script>
 		<script src="themes/scratch/javascript/scratch-embed.js"></script>
+		<script src="themes/scratch/javascript/scratch-rss.js"></script>
 		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />

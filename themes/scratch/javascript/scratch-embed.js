@@ -21,6 +21,7 @@
 			itchData.data.embedContent = '';
 			
 			if (itchData.data.url) {
+				Scratch.loading(body);
 				// this happens async, which is why we load and save data again separately
 				$.get('jsonservice/socialGraph/convertUrl', {remoteUrl: itchData.data.url}, function (data) {
 					var saveInto = $(itch).data('itch');
