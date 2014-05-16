@@ -36,7 +36,6 @@
 				})
 			}
 		});
-		itch.find('[name=url]').focus();
 	};
 
 	$(document).on('itchCreated', '.itch-type-Embed', function () {

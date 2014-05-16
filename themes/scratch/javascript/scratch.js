@@ -38,20 +38,57 @@
 			this.ALL_ITCHES = itches;
 		}
 
+		// see if we've got a start point
+		var startPoint = null;
+		
 		var origin = this.initOrigin();
 		this.loadTilesAround(origin);
+		
+		if (this.state.last_interact) {
+			startPoint = this.state.last_interact.split('_');
+			startPoint[0] = parseInt(startPoint[0]);
+			startPoint[1] = parseInt(startPoint[1]);
+			var startTile = this.addTile(origin, startPoint);
+			this.loadTilesAround(startTile);
+		}
+
+		if (this.state.current_transform) {
+			zoomer.panzoom('setMatrix', this.state.current_transform);
+		}
 	};
 
 	Scratch.save = function() {
 		this.store.save('scratch_state', this.state);
 		this.store.save('itches', this.ALL_ITCHES);
 	};
+	
+	Scratch.updateState = function (option, value) {
+		var newOpts = {};
+		if (typeof option === 'string') {
+			newOpts[option] = value;
+		} else {
+			newOpts = option;
+		}
+		
+		$.extend(this.state, newOpts);
 
-	Scratch.initOrigin = function() {
+		this.save();
+	}
+
+	/**
+	 * Initialise the origin point
+	 * 
+	 * @param {type} startPoint
+	 * @returns {undefined}
+	 */
+	Scratch.initOrigin = function(startPoint) {
+		if (!startPoint) {
+			startPoint = [0,0];
+		}
 		if (this.ALL_ITCHES.length > 0) {
 			return;
 		}
-		return this.addTile(null, [0, 0]);
+		return this.addTile(null, startPoint);
 	}
 
 	Scratch.addTile = function(relativeElem, relativePos) {
@@ -284,14 +321,14 @@
 	 * @returns 
 	 */
 	Scratch.currentTransform = function() {
-		var values = [1, 0, 0, 0, 0, 0];
-		var transform = zoomer.css('transform');
-		if (transform && transform !== "none") {
-			values = transform.match(/-?[0-9\.]+/g);
-		}
-		return values;
+		return zoomer.panzoom('getMatrix');
 	}
 
+	/**
+	 * Nuke everything
+	 * 
+	 * @returns void
+	 */
 	Scratch.hardKill = function() {
 		if (confirm('Sure?')) {
 			this.store.remove('scratch_state');
@@ -329,7 +366,6 @@
 
 
 	Scratch.editForm = function(itch, templateId, beforeEdit, afterEdit, propertySet) {
-
 		if (typeof beforeEdit === 'string') {
 			propertySet = beforeEdit;
 			beforeEdit = afterEdit;
@@ -391,8 +427,14 @@
 
 	// Init the dom
 	$(function() {
+		// the last point we right clicked
 		var lastContext = null;
+		
+		// the event representing the last point we zoomed 
 		var lastZoom = null;
+		
+		// the last tile we interacted with
+		var lastInteract = null;
 
 		zoomer = $('.panzoom');
 		zoomer.panzoom({
@@ -405,6 +447,8 @@
 			zoomer.panzoom('resetZoom', {
 				focal: lastZoom
 			});
+			
+			Scratch.updateState('current_transform', Scratch.currentTransform());
 		})
 
 		zoomer.parent().on('mousewheel.focal', function(e) {
@@ -415,8 +459,10 @@
 			zoomer.panzoom('zoom', zoomOut, {
 				increment: 0.1,
 				animate: false,
-				focal: e
+				focal: lastZoom
 			});
+
+			Scratch.updateState('current_transform', Scratch.currentTransform());
 		});
 
 		$(zoomer).on('touchstart mouseover', '.itch', function() {
@@ -429,7 +475,13 @@
 
 		$(zoomer).on('panzoomend', function(e) {
 			Scratch.loadTilesAround($(e.target));
-//			console.log("pan-zoom end");
+			
+			Scratch.updateState({
+				'current_transform': Scratch.currentTransform(),
+				'last_interact': $(e.target).attr('id')
+			});
+
+			Scratch.updateState();
 		})
 
 		$(document).on('click', '.basictile', function(e) {
