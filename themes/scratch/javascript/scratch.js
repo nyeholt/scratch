@@ -436,12 +436,6 @@
 			if ($(e.target).hasClass('basictile')) {
 				Scratch.closeItches();
 			}
-			
-			if (e.ctrlKey) {
-				zoomer.panzoom('resetZoom', {
-					focal: e
-				});
-			}
 		})
 		
 		$(document).on('dblclick', '.basictile', function (e) {
