@@ -100,7 +100,7 @@ class SocialGraphService {
 				$data[$key] = Varchar::create_field('Varchar', $value);
 			}
 			if (isset($data['url'])) {
-				return array('Title' => $graph->Title, 'Content' => ArrayData::create($data)->renderWith('OpenGraphPost'));
+				return array('Title' => $graph->Title, 'Content' => ArrayData::create($data)->renderWith('OpenGraphPost')->raw());
 			}
 		}
 
