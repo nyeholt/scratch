@@ -1,14 +1,14 @@
 ;
 (function($) {
 	var zoomer;
-	
-	var TILE_SIZE = 500;
+
+	var TILE_SIZE = 700;
 	var TILE_CLASS = 'basictile';
-	
+
 	var ITCH_CLASS = 'itch';
-	
+
 	var CONTAINER = '.panzoom';
-	
+
 	var Scratch = {
 		store: null,
 		ALL_TILES: {},
@@ -19,11 +19,11 @@
 		}
 	};
 
-	Scratch.setStore = function (store) {
+	Scratch.setStore = function(store) {
 		this.store = store;
 	}
-	
-	Scratch.init = function () {
+
+	Scratch.init = function() {
 		if (!this.store) {
 			alert("No storage specified");
 		}
@@ -32,34 +32,34 @@
 		if (state) {
 			this.state = state;
 		}
-		
+
 		var itches = this.store.get('itches');
 		if (itches) {
 			this.ALL_ITCHES = itches;
 		}
-		
+
 		var origin = this.initOrigin();
 		this.loadTilesAround(origin);
 	};
 
-	Scratch.save = function () {
+	Scratch.save = function() {
 		this.store.save('scratch_state', this.state);
 		this.store.save('itches', this.ALL_ITCHES);
 	};
 
-	Scratch.initOrigin = function () {
+	Scratch.initOrigin = function() {
 		if (this.ALL_ITCHES.length > 0) {
 			return;
 		}
-		return this.addTile(null, [0,0]);
+		return this.addTile(null, [0, 0]);
 	}
 
 	Scratch.addTile = function(relativeElem, relativePos) {
 		var currentPos = {top: 0, left: 0};
-		var newRelPos = [0,0];
+		var newRelPos = [0, 0];
 		if (relativeElem) {
 			// horrible hack, but works around the issue of the parent webkit transform
-			currentPos  = {
+			currentPos = {
 				top: parseInt($(relativeElem).css('top')),
 				left: parseInt($(relativeElem).css('left')),
 			}
@@ -67,7 +67,7 @@
 			var relativeToOrigin = relativeElem.attr('id').split('_');
 			var relTop = parseInt(relativeToOrigin[0]);
 			var relLeft = parseInt(relativeToOrigin[1]);
-			
+
 			newRelPos[0] = relTop + relativePos[0];
 			newRelPos[1] = relLeft + relativePos[1];
 		}
@@ -84,7 +84,7 @@
 			return;
 		}
 
-		
+
 
 		var newTile = $('<div>').addClass(TILE_CLASS).attr('id', key).css(newTilePos).appendTo(CONTAINER);
 
@@ -127,7 +127,7 @@
 				var itch = dropped.data('itch');
 				itch.position = [parseInt(dropped.css('top')), parseInt(dropped.css('left'))];
 				itch.tile = droppedOn.attr('id');
-				
+
 				Scratch.save();
 
 				zoomer.panzoom('enable');
@@ -141,13 +141,13 @@
 
 		return newTile;
 	};
-	
-	Scratch.getTile = function (x, y) {
+
+	Scratch.getTile = function(x, y) {
 		var key = (x * TILE_SIZE) + '_' + (y * TILE_SIZE);
 		return Scratch.ALL_TILES[key];
 	};
 
-	Scratch.loadTilesAround = function (relativeElem) {
+	Scratch.loadTilesAround = function(relativeElem) {
 		for (var i = -1; i <= 1; i++) {
 			for (var j = -1; j <= 1; j++) {
 				if (i == 0 && j == 0) {
@@ -158,8 +158,8 @@
 		}
 	};
 
-	Scratch.deleteItch = function (id) {
-		var elem = $('.itch[data-id=' + id +']');
+	Scratch.deleteItch = function(id) {
+		var elem = $('.itch[data-id=' + id + ']');
 		if (elem.length) {
 			delete this.ALL_ITCHES[id];
 			elem.remove();
@@ -177,7 +177,7 @@
 	 *				The type of the itch to add
 	 * @returns DOMElement
 	 */
-	Scratch.addItch = function (to, pos, type, existingData) {
+	Scratch.addItch = function(to, pos, type, existingData) {
 		// we've got existing data to work with
 		var size = [400, 300];
 
@@ -195,7 +195,7 @@
 		if (to.split && to.indexOf(',') > 0) {
 			var bits = to.split(',');
 			to = Scratch.getTile(bits[0], bits[1]);
-			
+
 			if (!to) {
 				return;
 			}
@@ -211,12 +211,12 @@
 			})
 			.addClass('itch-type-' + type)
 			.appendTo(to);
-		
+
 		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
 
 		// bind events
 		itch.draggable({
-			handle: '.itch-handle',
+//			handle: '.itch-handle',
 			stop: function(event, ui) {
 				// note: This is handled in the drop handler above to prevent problems with the
 				// new parent elem not being tracked
@@ -249,7 +249,7 @@
 		this.ALL_ITCHES[existingData.id] = existingData;
 		itch.data('itch', existingData);
 		itch.attr('data-id', existingData.id);
-		
+
 		if (doSave) {
 			this.save();
 		}
@@ -257,33 +257,33 @@
 //		$(document).trigger('itchCreated');
 		$(itch).trigger('itchCreated');
 		$(itch).trigger('renderItch');
-		
+
 		return itch;
 	};
-	
-	Scratch.getItch = function (id) {
+
+	Scratch.getItch = function(id) {
 		return this.ALL_ITCHES[id];
 	};
-	
-	Scratch.nextItchId = function () {
+
+	Scratch.nextItchId = function() {
 		return ++this.state.itchId;
 	};
 
-	Scratch.loadItchesForTile = function (tileId) {
+	Scratch.loadItchesForTile = function(tileId) {
 		for (var k in this.ALL_ITCHES) {
 			if (this.ALL_ITCHES[k].tile == tileId) {
 				this.addItch(this.ALL_ITCHES[k]);
 			}
 		}
 	}
-	
+
 	// SOME UI HELPERS
 	/**
 	 * Get the currently applied UI transform by the zoomer
 	 * 
 	 * @returns 
 	 */
-	Scratch.currentTransform = function () {
+	Scratch.currentTransform = function() {
 		var values = [1, 0, 0, 0, 0, 0];
 		var transform = zoomer.css('transform');
 		if (transform && transform !== "none") {
@@ -291,32 +291,63 @@
 		}
 		return values;
 	}
-	
-	Scratch.hardKill = function () {
+
+	Scratch.hardKill = function() {
 		if (confirm('Sure?')) {
 			this.store.remove('scratch_state');
 			this.store.remove('itches');
 			location.reload();
 		}
 	}
-	
+
 	Scratch.bindToForm = function(data, form) {
 		for (var key in data) {
-			var input = form.find('[name=' + key +']');
+			var input = form.find('[name=' + key + ']');
 			if (input.length) {
 				input.val(data[key]);
 			}
 		}
 	}
-	
-	Scratch.loadFromForm = function (data, form) {
+
+	Scratch.loadFromForm = function(data, form) {
 		var inputs = form.find('[name]');
-		inputs.each(function () {
+		inputs.each(function() {
 			data[this.name] = $(this).val();
 		})
-	}
+	};
 	
-	$(document).on('renderItch', '.itch', function () {
+	
+	Scratch.editForm = function (itch, templateId, propertySet) {
+		if (!propertySet) {
+			propertySet = 'data';
+		}
+		
+		var form = $(templateId).html();
+		itch.find('.itch-body').html(form);
+
+		var itchData = itch.data('itch');
+		
+		var submitter = itch.find('.itchForm');
+
+		Scratch.bindToForm(itchData[propertySet], submitter);
+
+		submitter.submit(function (e) {
+			e.preventDefault();
+
+			Scratch.loadFromForm(itchData[propertySet], submitter);
+			Scratch.save();
+
+			submitter.remove();
+			delete submitter;
+			delete itchData;
+			delete form;
+
+			$(itch).trigger('renderItch');
+			return false;
+		});
+	};
+
+	$(document).on('renderItch', '.itch', function() {
 		var data = $(this).data('itch');
 		if (data.options.backgroundColor) {
 			$(this).css('background-color', data.options.backgroundColor);
@@ -328,13 +359,19 @@
 
 	$(function() {
 		var lastContext = null;
-		
+
 		zoomer = $('.panzoom');
 		zoomer.panzoom({
 			$zoomIn: $("#zoomin"),
-            $zoomOut: $("#zoomout"),
-			$reset: $('#resetzoom')
+			$zoomOut: $("#zoomout"),
+			$reset: $('#resetzoom'),
+			minScale: 0.2
 		});
+		
+		$(document).on('mousewheel', function () {
+//			console.log(e);
+		});
+
 
 		$(zoomer).on('touchstart mouseover', '.itch', function() {
 			zoomer.panzoom('disable');
@@ -349,10 +386,12 @@
 //			console.log("pan-zoom end");
 		})
 
-		$(document).on('contextmenu', '.basictile', function (e) {
+		$(document).on('contextmenu', '.basictile', function(e) {
 			var target = $(e.target);
 			if (!target.is('.basictile')) {
+				e.stopImmediatePropagation();
 				console.log("Context menu on a non-basictile element... baddd");
+				return;
 				e.preventDefault();
 				e.stopPropagation();
 				e.stopImmediatePropagation();
@@ -373,7 +412,7 @@
 				var newY = offsetPos[1] ? offsetPos[1] / transform[0] : 0;
 				offsetPos = [newY, newX];
 			}
-			
+
 			lastContext = {
 				element: '#' + target.attr('id'),
 				position: offsetPos
@@ -381,7 +420,7 @@
 		});
 
 		$.contextMenu({
-			selector: '.basictile', 
+			selector: '.basictile',
 			callback: function(key, options) {
 				if (!lastContext) {
 					return;
@@ -392,22 +431,22 @@
 			},
 			items: {
 				"newItch": {
-					name: 'Add Itch', 
-					execute: function (options) {
+					name: 'Add Itch',
+					execute: function(options) {
 						Scratch.addItch($(lastContext.element), lastContext.position, 'Itch');
 					}
 				},
 				'embed': {
 					name: "Embed",
-					execute: function (o) {
+					execute: function(o) {
 						Scratch.addItch($(lastContext.element), lastContext.position, 'Embed');
 					}
 				}
 			}
 		});
-		
+
 		$.contextMenu({
-			selector: '.itch-handle', 
+			selector: '.itch-options',
 			callback: function(key, options) {
 				if (options.items && options.items[key] && options.items[key].execute) {
 					options.items[key].execute.call($(this).parents('.itch'), options);
@@ -415,35 +454,16 @@
 			},
 			items: {
 				"options": {
-					name: 'Options', 
-					execute: function (options) {
+					name: 'Options',
+					execute: function(options) {
 						var itch = $(this);
-						
-						var form = $('#GeneralSettingsForm').html();
-						itch.find('.itch-body').html(form);
-						
-						var itchData = itch.data('itch');
-						
-						var submitter = itch.find('.generalSettingsForm');
-						Scratch.bindToForm(itchData.options, submitter);
 
-						submitter.submit(function (e) {
-							e.preventDefault();
-							Scratch.loadFromForm(itchData.options, submitter);
-							Scratch.save();
-							submitter.remove();
-							delete submitter;
-							
-							$(itch).trigger('renderItch');
-							
-							return false;
-						});
-						
+						Scratch.editForm(itch, '#GeneralSettingsForm', 'options')
 					}
 				},
 				"delete": {
 					name: "Delete",
-					execute: function (o) {
+					execute: function(o) {
 						var id = $(this).attr('data-id');
 						if (id) {
 							if (confirm("Sure?")) {

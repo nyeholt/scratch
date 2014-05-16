@@ -21,8 +21,8 @@ Overrides
 }
 
 .basictile {
-	width: 500px;
-	height: 500px;
+	width: 700px;
+	height: 700px;
 	border: 1px solid #efefef;
 	position: absolute;
 	background-color: #fff;
@@ -49,7 +49,7 @@ Overrides
 	margin: 0px auto;
 	height: 10px;
 	background-color: #eee;
-	cursor: move;
+	/*cursor: move;*/
 }
 
 .itch-body {
@@ -68,6 +68,7 @@ Overrides
 	height: 10px;
 	border: 1px solid #000;
 	background-color: #ddd;
+	cursor: crosshair;
 }
 
 #controls {

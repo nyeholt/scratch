@@ -2,35 +2,19 @@
 	
 	var render = function (itch) {
 		var itchData = itch.data('itch');
+		var body = itch.find('.itch-body');
+		body.empty();
 		if (itchData.data.url) {
 			$.get('jsonservice/socialGraph/convertUrl', {remoteUrl: itchData.data.url}, function (data) {
 				if (data && data.response && data.response.Content) {
-					itch.find('.itch-body').html(data.response.Content);
+					body.html(data.response.Content);
 				}
 			})
 		}
 	};
-	
+
 	var renderOptions = function (itch) {
-		var form = $('#EmbedEditForm').html();
-		itch.find('.itch-body').html(form);
-
-		var itchData = itch.data('itch');
-		var submitter = itch.find('.embedEditForm');
-		Scratch.bindToForm(itchData.data, submitter);
-
-		submitter.submit(function (e) {
-			e.preventDefault();
-			
-			Scratch.loadFromForm(itchData.data, submitter);
-			Scratch.save();
-			submitter.remove();
-			delete submitter;
-
-			$(itch).trigger('renderItch');
-
-			return false;
-		});
+		Scratch.editForm(itch, '#EmbedEditForm');
 	};
 	
 	$(document).on('itchCreated', '.itch-type-Embed', function () {
@@ -41,8 +25,11 @@
 		render($(this));
 	});
 	
-	$(document).on('click', '.itch-type-Embed .itch-options', function () {
-		var itch = $(this).parents('.itch');
-		renderOptions(itch);
+	$(document).on('click', '.itch-type-Embed .itch-handle', function () {
+		if (itch.find('.itchForm').length > 0) {
+			render(itch);
+		} else {
+			renderOptions(itch);
+		}
 	});
 })(jQuery);

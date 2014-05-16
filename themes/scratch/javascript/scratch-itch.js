@@ -9,28 +9,7 @@
 	};
 	
 	var renderOptions = function (itch) {
-		var form = $('#ItchEditForm').html();
-		itch.find('.itch-body').html(form);
-
-		var itchData = itch.data('itch');
-		
-		var submitter = itch.find('.itchEditForm');
-		
-		Scratch.bindToForm(itchData.data, submitter);
-
-
-		submitter.submit(function (e) {
-			e.preventDefault();
-			Scratch.loadFromForm(itchData.data, submitter);
-			Scratch.save();
-			
-			submitter.remove();
-			delete submitter;
-
-			$(itch).trigger('renderItch');
-
-			return false;
-		});
+		Scratch.editForm(itch, '#ItchEditForm');
 	}
 	
 	$(document).on('itchCreated', '.itch-type-Itch', function () {
@@ -41,8 +20,13 @@
 		render($(this));
 	});
 	
-	$(document).on('click', '.itch-type-Itch .itch-options', function () {
+	$(document).on('click', '.itch-type-Itch .itch-handle', function () {
 		var itch = $(this).parents('.itch');
-		renderOptions(itch);
+		if (itch.find('.itchForm').length > 0) {
+			render(itch);
+		} else {
+			renderOptions(itch);
+		}
+		
 	});
 })(jQuery);
