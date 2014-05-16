@@ -315,9 +315,27 @@
 			data[this.name] = $(this).val();
 		})
 	};
+	
+	/**
+	 * Close all open itch forms (ie cancel any editing and just render()
+	 * 
+	 * @returns null
+	 */
+	Scratch.closeItches = function () {
+		$('.itch').each(function () {
+			$(this).trigger('renderItch');
+		})
+	};
 
 
-	Scratch.editForm = function(itch, templateId, propertySet) {
+	Scratch.editForm = function(itch, templateId, beforeEdit, afterEdit, propertySet) {
+		
+		if (typeof beforeEdit === 'string') {
+			propertySet = beforeEdit; 
+			beforeEdit = afterEdit;
+			afterEdit = null;
+		}
+
 		if (!propertySet) {
 			propertySet = 'data';
 		}
@@ -330,11 +348,20 @@
 		var submitter = itch.find('.itchForm');
 
 		Scratch.bindToForm(itchData[propertySet], submitter);
+		
+		if (beforeEdit) {
+			beforeEdit.call(itch, submitter, itchData);
+		}
 
 		submitter.submit(function(e) {
 			e.preventDefault();
 
 			Scratch.loadFromForm(itchData[propertySet], submitter);
+			
+			if (afterEdit) {
+				afterEdit.call(itch, submitter, itchData);
+			}
+			
 			Scratch.save();
 
 			submitter.remove();
@@ -380,7 +407,7 @@
 			var delta = e.delta || e.originalEvent.wheelDelta;
 			var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
 			zoomer.panzoom('zoom', zoomOut, {
-				increment: 0.2,
+				increment: 0.1,
 				animate: false,
 				focal: e
 			});
@@ -397,6 +424,12 @@
 		$(zoomer).on('panzoomend', function(e) {
 			Scratch.loadTilesAround($(e.target));
 //			console.log("pan-zoom end");
+		})
+		
+		$(document).on('keyup', function (e) {
+			if (e.which === 27) {
+				Scratch.closeItches();
+			}
 		})
 
 		$(document).on('contextmenu', '.basictile', function(e) {
