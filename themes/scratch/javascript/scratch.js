@@ -301,37 +301,37 @@
 	}
 
 	Scratch.bindToForm = function(data, form) {
-		for (var key in data) {
-			var input = form.find('[name=' + key + ']');
-			if (input.length) {
-				input.val(data[key]);
-			}
-		}
+		form.populate(data);
 	}
 
 	Scratch.loadFromForm = function(data, form) {
-		var inputs = form.find('[name]');
-		inputs.each(function() {
-			data[this.name] = $(this).val();
-		})
+		var object = form.serializeJSON();
+		for (var key in object) {
+			data[key]  = object[key];
+		}
+//		inputs.each(function() {
+//			data[this.name] = $(this).val();
+//		})
 	};
-	
+
 	/**
 	 * Close all open itch forms (ie cancel any editing and just render()
 	 * 
 	 * @returns null
 	 */
-	Scratch.closeItches = function () {
-		$('.itch').each(function () {
-			$(this).trigger('renderItch');
+	Scratch.closeItches = function() {
+		$('.itch').each(function() {
+			if ($(this).find('.itchForm').is(':visible')) {
+				$(this).trigger('renderItch');
+			}
 		})
 	};
 
 
 	Scratch.editForm = function(itch, templateId, beforeEdit, afterEdit, propertySet) {
-		
+
 		if (typeof beforeEdit === 'string') {
-			propertySet = beforeEdit; 
+			propertySet = beforeEdit;
 			beforeEdit = afterEdit;
 			afterEdit = null;
 		}
@@ -348,7 +348,7 @@
 		var submitter = itch.find('.itchForm');
 
 		Scratch.bindToForm(itchData[propertySet], submitter);
-		
+
 		if (beforeEdit) {
 			beforeEdit.call(itch, submitter, itchData);
 		}
@@ -357,11 +357,11 @@
 			e.preventDefault();
 
 			Scratch.loadFromForm(itchData[propertySet], submitter);
-			
+
 			if (afterEdit) {
 				afterEdit.call(itch, submitter, itchData);
 			}
-			
+
 			Scratch.save();
 
 			submitter.remove();
@@ -384,6 +384,8 @@
 	window.Scratch = Scratch;
 
 
+
+	// Init the dom
 	$(function() {
 		var lastContext = null;
 		var lastZoom = null;
@@ -394,8 +396,8 @@
 			$zoomOut: $("#zoomout"),
 			minScale: 0.2
 		});
-		
-		$(document).on('click', '#resetzoom', function () {
+
+		$(document).on('click', '#resetzoom', function() {
 			zoomer.panzoom('resetZoom', {
 				focal: lastZoom
 			});
@@ -425,8 +427,14 @@
 			Scratch.loadTilesAround($(e.target));
 //			console.log("pan-zoom end");
 		})
-		
-		$(document).on('keyup', function (e) {
+
+		$(document).on('click', '.basictile', function(e) {
+			if ($(e.target).hasClass('basictile')) {
+				Scratch.closeItches();
+			}
+		})
+
+		$(document).on('keyup', function(e) {
 			if (e.which === 27) {
 				Scratch.closeItches();
 			}
@@ -477,7 +485,7 @@
 			},
 			items: {
 				"newItch": {
-					name: 'Add Itch',
+					name: 'Itch',
 					execute: function(options) {
 						Scratch.addItch($(lastContext.element), lastContext.position, 'Itch');
 					}
@@ -493,6 +501,7 @@
 
 		$.contextMenu({
 			selector: '.itch-options',
+			trigger: "left",
 			callback: function(key, options) {
 				if (options.items && options.items[key] && options.items[key].execute) {
 					options.items[key].execute.call($(this).parents('.itch'), options);
@@ -522,6 +531,22 @@
 		});
 
 		Scratch.init();
-	})
+	});
+
+	$.fn.serializeObject = function() {
+		var o = {};
+		var a = this.serializeArray();
+		$.each(a, function() {
+			if (o[this.name]) {
+				if (!o[this.name].push) {
+					o[this.name] = [o[this.name]];
+				}
+				o[this.name].push(this.value || '');
+			} else {
+				o[this.name] = this.value || '';
+			}
+		});
+		return o;
+	};
 })(jQuery);
 

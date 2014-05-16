@@ -6,6 +6,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-2.0.0.min.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="themes/scratch/javascript/jquery.serializejson.min.js"></script>
+		<script type="text/javascript" src="themes/scratch/javascript/jquery.populate.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
 		
 		<script src="themes/scratch/javascript/jquery.panzoom.js"></script>
@@ -40,6 +42,16 @@
 			<label>Background</label>
 			<input type="text" name="backgroundColor" />
 			</div>
+			<div>
+			<label>Labels</label>
+			<input type="text" name="labels" />
+			</div>
+			<div>
+			<label>Checkbox<input type="checkbox" name="dummy[]" value="a"/></label><br/>
+			<label>Checkbox2<input type="checkbox" name="dummy[]" value="b"/></label><br/>
+			<label>Checkbox3<input type="checkbox" name="dummy[]" value="c"/></label><br/>
+			</div>
+			<input type="submit" value="OK" />
 		</form>
 		</script>
 		
@@ -52,7 +64,7 @@
 
 		<script type="text/template" id="EmbedEditForm">
 		<form class="embedEditForm itchForm">
-			<input type="url" name="url" rows="10" />
+			<input type="text" name="url" rows="10" />
 		</form>
 		</script>
 	</body>
