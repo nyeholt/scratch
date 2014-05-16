@@ -436,14 +436,26 @@
 			if ($(e.target).hasClass('basictile')) {
 				Scratch.closeItches();
 			}
+			
+			if (e.ctrlKey) {
+				zoomer.panzoom('resetZoom', {
+					focal: e
+				});
+			}
 		})
+		
+		$(document).on('dblclick', '.basictile', function (e) {
+			zoomer.panzoom('resetZoom', {
+				focal: e
+			});
+		});
 
 		$(document).on('keyup', function(e) {
 			if (e.which === 27) {
 				Scratch.closeItches();
 			}
 		})
-
+		
 		$(document).on('contextmenu', '.basictile', function(e) {
 			var target = $(e.target);
 			if (!target.is('.basictile')) {
