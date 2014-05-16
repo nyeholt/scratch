@@ -40,7 +40,7 @@
 
 		// see if we've got a start point
 		var startPoint = null;
-		
+
 		var origin = this.initOrigin();
 		this.loadTilesAround(origin);
 		
@@ -95,6 +95,12 @@
 		var currentPos = {top: 0, left: 0};
 		var newRelPos = [0, 0];
 		if (relativeElem) {
+			
+			if (!relativeElem.attr) {
+				Scratch.log("relativeElem not a jquery object");
+				Scratch.log(relativeElem);
+				return null;
+			}
 			// horrible hack, but works around the issue of the parent webkit transform
 			currentPos = {
 				top: parseInt($(relativeElem).css('top')),
@@ -246,8 +252,9 @@
 				width: size[0],
 				height: size[1]
 			})
-			.addClass('itch-type-' + type)
-			.appendTo(to);
+			.addClass('itch-type-' + type);
+		
+		itch.appendTo(to);
 
 		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
 
@@ -338,7 +345,11 @@
 	}
 
 	Scratch.bindToForm = function(data, form) {
-		form.populate(data);
+		try {
+			form.populate(data);
+		} catch (e) {
+			
+		}
 	}
 
 	Scratch.loadFromForm = function(data, form) {
@@ -435,6 +446,11 @@
 		
 		// the last tile we interacted with
 		var lastInteract = null;
+		
+		$('#collapsecontrols').click(function () {
+			$('#controls').removeClass('expanded');
+			$('#controls-body').empty();
+		})
 
 		zoomer = $('.panzoom');
 		zoomer.panzoom({
@@ -480,8 +496,6 @@
 				'current_transform': Scratch.currentTransform(),
 				'last_interact': $(e.target).attr('id')
 			});
-
-			Scratch.updateState();
 		})
 
 		$(document).on('click', '.basictile', function(e) {
@@ -494,6 +508,7 @@
 			zoomer.panzoom('resetZoom', {
 				focal: e
 			});
+			Scratch.updateState('current_transform', Scratch.currentTransform());
 		});
 
 		$(document).on('keyup', function(e) {
@@ -573,8 +588,52 @@
 					name: 'Options',
 					execute: function(options) {
 						var itch = $(this);
-
 						Scratch.editForm(itch, '#GeneralSettingsForm', 'options')
+					}
+				},
+				"export": {
+					name: "Export",
+					execute: function (o) {
+						var itch = $(this).data('itch');
+						var clone = JSON.stringify(itch);
+						clone = JSON.parse(clone);
+						delete clone['id'];
+						
+						var output = $('<textarea>').val(JSON.stringify(clone)).attr('rows', 6);
+						$('#controls-body').html(output);
+						$('#controls').addClass('expanded');
+					}
+				},
+				"load": {
+					name: "Load data",
+					execute: function (o) {
+						$('#controls-body').empty();
+						
+						var input = $('<textarea>').attr('rows', 6);
+						$('#controls-body').append(input);
+						
+						var button = $('<button>').text('Load')
+						
+						$('#controls-body').append(button);
+						
+						var itch = $(this);
+						
+						button.click(function () {
+							try {
+								var restored = JSON.parse(input.val());
+								if (restored) {
+									$.extend(itch.data('itch'), restored);
+									Scratch.save();
+									itch.trigger('renderItch');
+								}
+							} catch (ex) {
+								
+							}
+							$('#collapsecontrols').click();
+						})
+						
+						
+						$('#controls').addClass('expanded');
 					}
 				},
 				"delete": {

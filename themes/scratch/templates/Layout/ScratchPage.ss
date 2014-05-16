@@ -4,7 +4,7 @@
 		<% base_tag %>
 		<title>My project</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<script type="text/javascript" src="themes/scratch/javascript/jquery-2.0.0.min.js"></script>
+		<script type="text/javascript" src="themes/scratch/javascript/jquery-2.0.0.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.mousewheel.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.serializejson.min.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.populate.js"></script>
@@ -29,8 +29,17 @@
 	</head>
 	<body>
 		<div id="controls">
+			<div id="zoomcontrols">
 			<button id="zoomout" value="-">-</button><button id="resetzoom">0</button><button id="zoomin" value="+">+</button>
+			</div>
+			<div id="controls-body">
+				
+			</div>
+			
+			<button id="collapsecontrols">Close</button>
 		</div>
+		
+		
 		<div id="container">
 		<div class="panzoom">
 			
@@ -47,11 +56,7 @@
 			<label>Labels</label>
 			<input type="text" name="labels" />
 			</div>
-			<div>
-			<label>Checkbox<input type="checkbox" name="dummy[]" value="a"/></label><br/>
-			<label>Checkbox2<input type="checkbox" name="dummy[]" value="b"/></label><br/>
-			<label>Checkbox3<input type="checkbox" name="dummy[]" value="c"/></label><br/>
-			</div>
+			
 			<input type="submit" value="OK" />
 		</form>
 		</script>
