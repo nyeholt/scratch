@@ -5,8 +5,10 @@
 		<title>My project</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-2.0.0.min.js"></script>
+		<script type="text/javascript" src="themes/scratch/javascript/jquery.mousewheel.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
-		<script src="themes/scratch/javascript/jquery.panzoom.min.js"></script>
+		
+		<script src="themes/scratch/javascript/jquery.panzoom.js"></script>
 		<script src="themes/scratch/javascript/jquery-context/jquery.contextMenu.js"></script>
 		<script src="themes/scratch/javascript/jquery.gdb.js?v1.2.1"></script>
 		

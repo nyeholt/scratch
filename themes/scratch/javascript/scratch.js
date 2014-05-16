@@ -315,23 +315,23 @@
 			data[this.name] = $(this).val();
 		})
 	};
-	
-	
-	Scratch.editForm = function (itch, templateId, propertySet) {
+
+
+	Scratch.editForm = function(itch, templateId, propertySet) {
 		if (!propertySet) {
 			propertySet = 'data';
 		}
-		
+
 		var form = $(templateId).html();
 		itch.find('.itch-body').html(form);
 
 		var itchData = itch.data('itch');
-		
+
 		var submitter = itch.find('.itchForm');
 
 		Scratch.bindToForm(itchData[propertySet], submitter);
 
-		submitter.submit(function (e) {
+		submitter.submit(function(e) {
 			e.preventDefault();
 
 			Scratch.loadFromForm(itchData[propertySet], submitter);
@@ -359,19 +359,32 @@
 
 	$(function() {
 		var lastContext = null;
+		var lastZoom = null;
 
 		zoomer = $('.panzoom');
 		zoomer.panzoom({
 			$zoomIn: $("#zoomin"),
 			$zoomOut: $("#zoomout"),
-			$reset: $('#resetzoom'),
 			minScale: 0.2
 		});
 		
-		$(document).on('mousewheel', function () {
-//			console.log(e);
-		});
+		$(document).on('click', '#resetzoom', function () {
+			zoomer.panzoom('resetZoom', {
+				focal: lastZoom
+			});
+		})
 
+		zoomer.parent().on('mousewheel.focal', function(e) {
+			lastZoom = e;
+			e.preventDefault();
+			var delta = e.delta || e.originalEvent.wheelDelta;
+			var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+			zoomer.panzoom('zoom', zoomOut, {
+				increment: 0.2,
+				animate: false,
+				focal: e
+			});
+		});
 
 		$(zoomer).on('touchstart mouseover', '.itch', function() {
 			zoomer.panzoom('disable');
