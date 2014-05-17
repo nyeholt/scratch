@@ -4,6 +4,7 @@
 		<% base_tag %>
 		<title>My project</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="themes/scratch/javascript/base64.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-2.0.0.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.mousewheel.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.serializejson.min.js"></script>

@@ -22,6 +22,12 @@
 	Scratch.setStore = function(store) {
 		this.store = store;
 	}
+	
+	Scratch.log = function (msg) {
+		if (console && console.log) {
+			console.log(msg);
+		}
+	}
 
 	Scratch.init = function() {
 		if (!this.store) {
@@ -521,7 +527,7 @@
 			var target = $(e.target);
 			if (!target.is('.basictile')) {
 				e.stopImmediatePropagation();
-				console.log("Context menu on a non-basictile element... baddd");
+				Scratch.log("Context menu on a non-basictile element... baddd");
 				return;
 				e.preventDefault();
 				e.stopPropagation();
@@ -549,108 +555,125 @@
 				position: offsetPos
 			};
 		});
-
-		$.contextMenu({
-			selector: '.basictile',
-			callback: function(key, options) {
-				if (!lastContext) {
-					return;
-				}
-				if (options.items && options.items[key] && options.items[key].execute) {
-					options.items[key].execute.call(this, options);
-				} else {
-					Scratch.addItch($(lastContext.element), lastContext.position, options.items[key].name);
-				}
-			},
-			items: {
-				"newItch": {
-					name: 'Itch'
-				},
-				'embed': {
-					name: "Embed"
-				},
-				'rss': {
-					name: "RSS"
-				}
+		
+		var itemMenu = {
+			"newItch": {
+				name: 'Itch'
 			}
-		});
+		};
 
-		$.contextMenu({
-			selector: '.itch-options',
-			trigger: "left",
-			callback: function(key, options) {
-				if (options.items && options.items[key] && options.items[key].execute) {
-					options.items[key].execute.call($(this).parents('.itch'), options);
+		var defaultMenuOptions = {
+			"options": {
+				name: 'Options',
+				execute: function(options) {
+					var itch = $(this);
+					Scratch.editForm(itch, '#GeneralSettingsForm', 'options')
 				}
 			},
-			items: {
-				"options": {
-					name: 'Options',
-					execute: function(options) {
-						var itch = $(this);
-						Scratch.editForm(itch, '#GeneralSettingsForm', 'options')
-					}
-				},
-				"export": {
-					name: "Export",
-					execute: function (o) {
-						var itch = $(this).data('itch');
-						var clone = JSON.stringify(itch);
-						clone = JSON.parse(clone);
-						delete clone['id'];
-						
-						var output = $('<textarea>').val(JSON.stringify(clone)).attr('rows', 6);
-						$('#controls-body').html(output);
-						$('#controls').addClass('expanded');
-					}
-				},
-				"load": {
-					name: "Load data",
-					execute: function (o) {
-						$('#controls-body').empty();
-						
-						var input = $('<textarea>').attr('rows', 6);
-						$('#controls-body').append(input);
-						
-						var button = $('<button>').text('Load')
-						
-						$('#controls-body').append(button);
-						
-						var itch = $(this);
-						
-						button.click(function () {
-							try {
-								var restored = JSON.parse(input.val());
-								if (restored) {
-									$.extend(itch.data('itch'), restored);
-									Scratch.save();
-									itch.trigger('renderItch');
-								}
-							} catch (ex) {
-								
+			"export": {
+				name: "Export",
+				execute: function (o) {
+					var itch = $(this).data('itch');
+					var clone = JSON.stringify(itch);
+					clone = JSON.parse(clone);
+					delete clone['id'];
+
+					var encoded = Base64.encode(JSON.stringify(clone));
+					var output = $('<textarea>').val(encoded).attr('rows', 6);
+					$('#controls-body').html(output);
+					$('#controls').addClass('expanded');
+				}
+			},
+			"load": {
+				name: "Load data",
+				execute: function (o) {
+					$('#controls-body').empty();
+
+					var input = $('<textarea>').attr('rows', 6);
+					$('#controls-body').append(input);
+
+					var button = $('<button>').text('Load')
+
+					$('#controls-body').append(button);
+
+					var itch = $(this);
+
+					button.click(function () {
+						try {
+							var restored = JSON.parse(Base64.decode(input.val()));
+							console.log(restored);
+							if (restored) {
+								$.extend(itch.data('itch'), restored);
+								Scratch.save();
+								itch.trigger('renderItch');
 							}
-							$('#collapsecontrols').click();
-						})
-						
-						
-						$('#controls').addClass('expanded');
-					}
-				},
-				"delete": {
-					name: "Delete",
-					execute: function(o) {
-						var id = $(this).attr('data-id');
-						if (id) {
-							if (confirm("Sure?")) {
-								Scratch.deleteItch(id);
-							}
+						} catch (ex) {
+							Scratch.log(ex);
+						}
+						$('#collapsecontrols').click();
+					})
+
+
+					$('#controls').addClass('expanded');
+				}
+			},
+			"delete": {
+				name: "Delete",
+				execute: function(o) {
+					var id = $(this).attr('data-id');
+					if (id) {
+						if (confirm("Sure?")) {
+							Scratch.deleteItch(id);
 						}
 					}
 				}
 			}
+		};
+
+		var generalHandler = function(key, options) {
+			if (options.items && options.items[key] && options.items[key].execute) {
+				options.items[key].execute.call($(this).parents('.itch'), options);
+			}
+		};
+
+		$.contextMenu({
+			selector: '.itch-options',
+			trigger: "left",
+			build: function (trigger, e) {
+				var itchElem = $(trigger).parents('.itch');
+				
+				var items = $.extend(true, {}, defaultMenuOptions);
+				itchElem.trigger('prepareOptionMenu', items);
+				
+				return {
+					callback: generalHandler,
+					items: items
+				};
+			}
 		});
 
 		Scratch.init();
+		
+		setTimeout(function () {
+			$(document).trigger('prepareGeneralMenu', itemMenu);
+			
+			// this is built here to allow plugins time to actually modify 
+			// the menu items. 
+			$.contextMenu({
+				selector: '.basictile',
+				callback: function(key, options) {
+					if (!lastContext) {
+						return;
+					}
+					if (options.items && options.items[key] && options.items[key].execute) {
+						options.items[key].execute.call(this, options);
+					} else {
+						Scratch.addItch($(lastContext.element), lastContext.position, options.items[key].name);
+					}
+				},
+				items: itemMenu
+			});
+		}, 1000);
 	});
 
 	$.fn.serializeObject = function() {

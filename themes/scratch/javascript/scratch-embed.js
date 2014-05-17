@@ -38,6 +38,10 @@
 		});
 	};
 
+	$(document).on('prepareGeneralMenu', function (e, items) {
+		items['embed'] = { name: "Embed" };
+	});
+
 	$(document).on('itchCreated', '.itch-type-Embed', function () {
 		renderOptions($(this));
 	})

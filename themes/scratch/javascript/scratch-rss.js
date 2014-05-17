@@ -39,6 +39,11 @@
 		Scratch.editForm(itch, '#EmbedEditForm');
 	};
 
+	
+	$(document).on('prepareGeneralMenu', function (e, items) {
+		items['rss'] = { name: "RSS" };
+	});
+
 	$(document).on('itchCreated', '.itch-type-RSS', function() {
 		renderOptions($(this));
 	})
