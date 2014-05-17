@@ -4,6 +4,7 @@
 
 	var TILE_SIZE = 700;
 	var TILE_CLASS = 'basictile';
+	var $TILE_CLASS = '.' + TILE_CLASS;
 
 	var ITCH_CLASS = 'itch';
 
@@ -22,8 +23,8 @@
 	Scratch.setStore = function(store) {
 		this.store = store;
 	}
-	
-	Scratch.log = function (msg) {
+
+	Scratch.log = function(msg) {
 		if (console && console.log) {
 			console.log(msg);
 		}
@@ -49,7 +50,7 @@
 
 		var origin = this.initOrigin();
 		this.loadTilesAround(origin);
-		
+
 		if (this.state.last_interact) {
 			startPoint = this.state.last_interact.split('_');
 			startPoint[0] = parseInt(startPoint[0]);
@@ -67,15 +68,15 @@
 		this.store.save('scratch_state', this.state);
 		this.store.save('itches', this.ALL_ITCHES);
 	};
-	
-	Scratch.updateState = function (option, value) {
+
+	Scratch.updateState = function(option, value) {
 		var newOpts = {};
 		if (typeof option === 'string') {
 			newOpts[option] = value;
 		} else {
 			newOpts = option;
 		}
-		
+
 		$.extend(this.state, newOpts);
 
 		this.save();
@@ -89,7 +90,7 @@
 	 */
 	Scratch.initOrigin = function(startPoint) {
 		if (!startPoint) {
-			startPoint = [0,0];
+			startPoint = [0, 0];
 		}
 		if (this.ALL_ITCHES.length > 0) {
 			return;
@@ -101,7 +102,7 @@
 		var currentPos = {top: 0, left: 0};
 		var newRelPos = [0, 0];
 		if (relativeElem) {
-			
+
 			if (!relativeElem.attr) {
 				Scratch.log("relativeElem not a jquery object");
 				Scratch.log(relativeElem);
@@ -207,15 +208,6 @@
 		}
 	};
 
-	Scratch.deleteItch = function(id) {
-		var elem = $('.itch[data-id=' + id + ']');
-		if (elem.length) {
-			delete this.ALL_ITCHES[id];
-			elem.remove();
-			this.save();
-		}
-	};
-
 	/**
 	 * 
 	 * @param mixed to
@@ -230,7 +222,7 @@
 		// we've got existing data to work with
 		var size = [400, 300];
 
-		if (arguments.length == 1 && to.id) {
+		if (arguments.length == 1 && to.guid) {
 			existingData = to;
 			to = $('#' + existingData.tile);
 			pos = existingData.position;
@@ -259,7 +251,7 @@
 				height: size[1]
 			})
 			.addClass('itch-type-' + type);
-		
+
 		itch.appendTo(to);
 
 		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
@@ -287,6 +279,7 @@
 			doSave = true;
 			existingData = {
 				id: this.nextItchId(),
+				
 				tile: $(to).attr('id'),
 				position: pos,
 				type: type,
@@ -295,10 +288,14 @@
 				data: {}
 			};
 		}
+		
+		if (!existingData.guid) {
+			existingData.guid = Scratch.GUID();
+		}
 
-		this.ALL_ITCHES[existingData.id] = existingData;
+		this.ALL_ITCHES[existingData.guid] = existingData;
 		itch.data('itch', existingData);
-		itch.attr('data-id', existingData.id);
+		itch.attr('data-id', existingData.guid);
 
 		if (doSave) {
 			this.save();
@@ -311,9 +308,23 @@
 		return itch;
 	};
 
-	Scratch.getItch = function(id) {
-		return this.ALL_ITCHES[id];
+	Scratch.getItch = function(guid) {
+		return this.ALL_ITCHES[guid];
 	};
+	
+	Scratch.$getItch = function(guid) {
+		return $('.itch[data-id=' + guid + ']');
+	};
+	
+	Scratch.deleteItch = function(guid) {
+		var elem = this.$getItch(guid);
+		if (elem.length) {
+			delete this.ALL_ITCHES[guid];
+			elem.remove();
+			this.save();
+		}
+	};
+	
 
 	Scratch.nextItchId = function() {
 		return ++this.state.itchId;
@@ -335,6 +346,17 @@
 	 */
 	Scratch.currentTransform = function() {
 		return zoomer.panzoom('getMatrix');
+	};
+	
+	Scratch.panToItch = function (itch) {
+		var top = parseInt(itch.parent().css('top'));
+		var left = parseInt(itch.parent().css('left'));
+
+		zoomer.panzoom('pan', -1 * (left), -1 * (top + 200));
+	}
+	
+	Scratch.pan = function (x, y) {
+		zoomer.panzoom('pan', x, y);
 	}
 
 	/**
@@ -354,14 +376,14 @@
 		try {
 			form.populate(data);
 		} catch (e) {
-			
+
 		}
 	}
 
 	Scratch.loadFromForm = function(data, form) {
 		var object = form.serializeJSON();
 		for (var key in object) {
-			data[key]  = object[key];
+			data[key] = object[key];
 		}
 //		inputs.each(function() {
 //			data[this.name] = $(this).val();
@@ -393,8 +415,24 @@
 			propertySet = 'data';
 		}
 
-		var form = $(templateId).html();
-		itch.find('.itch-body').html(form);
+		// todo - implement using dform for json defined forms
+		var form = null;
+		if (typeof templateId === 'string') {
+			form = $(templateId).html();
+			itch.find('.itch-body').html(form);
+		} else {
+			// see https://github.com/daffl/jquery.dform
+			if (!templateId.html) {
+				templateId = {
+					'action': '#',
+					'method': 'post',
+					'class': 'itchForm',
+					'html': templateId
+				};
+			}
+			var o = itch.find('.itch-body').empty().dform(templateId);
+			form = itch.find('.itchForm');
+		}
 
 		var itchData = itch.data('itch');
 
@@ -426,10 +464,19 @@
 			return false;
 		});
 	};
-	
-	Scratch.loading = function (elem) {
+
+	Scratch.loading = function(elem) {
 		elem.html('<div class="ajax-loader"><img src="themes/scratch/images/712.png" /></div>');
 	}
+
+	var S4 = function() {
+		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+	}
+	
+	Scratch.GUID = function() {
+		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+	}
+
 
 	$(document).on('renderItch', '.itch', function() {
 		var data = $(this).data('itch');
@@ -437,6 +484,7 @@
 			$(this).css('background-color', data.options.backgroundColor);
 		}
 	});
+
 
 	window.Scratch = Scratch;
 
@@ -446,14 +494,14 @@
 	$(function() {
 		// the last point we right clicked
 		var lastContext = null;
-		
+
 		// the event representing the last point we zoomed 
 		var lastZoom = null;
-		
+
 		// the last tile we interacted with
 		var lastInteract = null;
-		
-		$('#collapsecontrols').click(function () {
+
+		$('#collapsecontrols').click(function() {
 			$('#controls').removeClass('expanded');
 			$('#controls-body').empty();
 		})
@@ -469,7 +517,7 @@
 			zoomer.panzoom('resetZoom', {
 				focal: lastZoom
 			});
-			
+
 			Scratch.updateState('current_transform', Scratch.currentTransform());
 		})
 
@@ -497,7 +545,7 @@
 
 		$(zoomer).on('panzoomend', function(e) {
 			Scratch.loadTilesAround($(e.target));
-			
+
 			Scratch.updateState({
 				'current_transform': Scratch.currentTransform(),
 				'last_interact': $(e.target).attr('id')
@@ -509,8 +557,8 @@
 				Scratch.closeItches();
 			}
 		})
-		
-		$(document).on('dblclick', '.basictile', function (e) {
+
+		$(document).on('dblclick', '.basictile', function(e) {
 			zoomer.panzoom('resetZoom', {
 				focal: e
 			});
@@ -522,7 +570,7 @@
 				Scratch.closeItches();
 			}
 		})
-		
+
 		$(document).on('contextmenu', '.basictile', function(e) {
 			var target = $(e.target);
 			if (!target.is('.basictile')) {
@@ -555,14 +603,14 @@
 				position: offsetPos
 			};
 		});
-		
+
 		var itemMenu = {
 			"newItch": {
 				name: 'Itch'
 			}
 		};
 
-		var defaultMenuOptions = {
+		var defaultOptionsMenu = {
 			"options": {
 				name: 'Options',
 				execute: function(options) {
@@ -570,53 +618,7 @@
 					Scratch.editForm(itch, '#GeneralSettingsForm', 'options')
 				}
 			},
-			"export": {
-				name: "Export",
-				execute: function (o) {
-					var itch = $(this).data('itch');
-					var clone = JSON.stringify(itch);
-					clone = JSON.parse(clone);
-					delete clone['id'];
-
-					var encoded = Base64.encode(JSON.stringify(clone));
-					var output = $('<textarea>').val(encoded).attr('rows', 6);
-					$('#controls-body').html(output);
-					$('#controls').addClass('expanded');
-				}
-			},
-			"load": {
-				name: "Load data",
-				execute: function (o) {
-					$('#controls-body').empty();
-
-					var input = $('<textarea>').attr('rows', 6);
-					$('#controls-body').append(input);
-
-					var button = $('<button>').text('Load')
-
-					$('#controls-body').append(button);
-
-					var itch = $(this);
-
-					button.click(function () {
-						try {
-							var restored = JSON.parse(Base64.decode(input.val()));
-							console.log(restored);
-							if (restored) {
-								$.extend(itch.data('itch'), restored);
-								Scratch.save();
-								itch.trigger('renderItch');
-							}
-						} catch (ex) {
-							Scratch.log(ex);
-						}
-						$('#collapsecontrols').click();
-					})
-
-
-					$('#controls').addClass('expanded');
-				}
-			},
+			
 			"delete": {
 				name: "Delete",
 				execute: function(o) {
@@ -636,27 +638,12 @@
 			}
 		};
 
-		$.contextMenu({
-			selector: '.itch-options',
-			trigger: "left",
-			build: function (trigger, e) {
-				var itchElem = $(trigger).parents('.itch');
-				
-				var items = $.extend(true, {}, defaultMenuOptions);
-				itchElem.trigger('prepareOptionMenu', items);
-				
-				return {
-					callback: generalHandler,
-					items: items
-				};
-			}
-		});
-
 		Scratch.init();
-		
-		setTimeout(function () {
+
+		setTimeout(function() {
 			$(document).trigger('prepareGeneralMenu', itemMenu);
-			
+			$(document).trigger('prepareOptionsMenu', defaultOptionsMenu);
+
 			// this is built here to allow plugins time to actually modify 
 			// the menu items. 
 			$.contextMenu({
@@ -673,6 +660,25 @@
 				},
 				items: itemMenu
 			});
+
+			$.contextMenu({
+				selector: '.itch-options',
+				trigger: "left",
+				build: function(trigger, e) {
+					var itchElem = $(trigger).parents('.itch');
+
+					var items = $.extend(true, {}, defaultOptionsMenu);
+					
+					// add any specific ones in
+					itchElem.trigger('itemOptionMenu', items);
+
+					return {
+						callback: generalHandler,
+						items: items
+					};
+				}
+			});
+
 		}, 1000);
 	});
 

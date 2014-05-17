@@ -108,11 +108,11 @@ Overrides
 }
 
 
-.itchForm input, .itchForm textarea, #controls textarea {
+.itch input, .itch textarea, #controls textarea {
 	width: 95%;
 }
 
-.itchForm input[type=submit] {
+.itch input[type=submit] {
 	width: auto;
 }
 

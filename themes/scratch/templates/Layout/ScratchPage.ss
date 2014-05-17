@@ -5,11 +5,14 @@
 		<title>My project</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<script type="text/javascript" src="themes/scratch/javascript/base64.js"></script>
+		
 		<script type="text/javascript" src="themes/scratch/javascript/jquery-2.0.0.js"></script>
+		<script type="text/javascript" src="themes/scratch/javascript/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
+		
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.mousewheel.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.serializejson.min.js"></script>
 		<script type="text/javascript" src="themes/scratch/javascript/jquery.populate.js"></script>
-		<script type="text/javascript" src="themes/scratch/javascript/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
+		<script type="text/javascript" src="themes/scratch/javascript/jquery.dform-1.1.0.js"></script>
 		
 		<script src="themes/scratch/javascript/jquery.panzoom.js"></script>
 		<script src="themes/scratch/javascript/jquery-context/jquery.contextMenu.js"></script>
@@ -20,9 +23,10 @@
 		<script src="themes/scratch/javascript/scratch.js"></script>
 		<script src="themes/scratch/javascript/scratch-local-storage.js"></script>
 		
-		<script src="themes/scratch/javascript/scratch-itch.js"></script>
-		<script src="themes/scratch/javascript/scratch-embed.js"></script>
-		<script src="themes/scratch/javascript/scratch-rss.js"></script>
+		<script src="themes/scratch/javascript/itches/scratch-itch.js"></script>
+		<script src="themes/scratch/javascript/itches/scratch-embed.js"></script>
+		<script src="themes/scratch/javascript/itches/scratch-rss.js"></script>
+		<script src="themes/scratch/javascript/itches/scratch-saver.js"></script>
 		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />
