@@ -65,6 +65,7 @@
 	};
 
 	Scratch.save = function() {
+		this.state.lastSaved = (new Date()).toUTCString();
 		this.store.save('scratch_state', this.state);
 		this.store.save('itches', this.ALL_ITCHES);
 	};
@@ -114,6 +115,8 @@
 				left: parseInt($(relativeElem).css('left')),
 			}
 			// horrible hack to determine a y/x position relative to origin
+			
+			
 			var relativeToOrigin = relativeElem.attr('id').split('_');
 			var relTop = parseInt(relativeToOrigin[0]);
 			var relLeft = parseInt(relativeToOrigin[1]);
@@ -253,7 +256,6 @@
 			.addClass('itch-type-' + type);
 
 		itch.appendTo(to);
-
 		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
 
 		// bind events
@@ -301,6 +303,10 @@
 
 		if (doSave) {
 			this.save();
+		}
+		
+		if (existingData.options.title) {
+			itch.attr('title', existingData.options.title);
 		}
 
 //		$(document).trigger('itchCreated');
@@ -425,6 +431,13 @@
 		} else {
 			// see https://github.com/daffl/jquery.dform
 			if (!templateId.html) {
+				templateId.push({
+					type: 'div',
+					html: [{
+						type: 'submit',
+						value: 'Save'
+					}]
+				})
 				templateId = {
 					'action': '#',
 					'method': 'post',
@@ -451,8 +464,12 @@
 
 			Scratch.loadFromForm(itchData[propertySet], submitter);
 
+			var renderAfterSave = true;
 			if (afterEdit) {
-				afterEdit.call(itch, submitter, itchData);
+				var ret = afterEdit.call(itch, submitter, itchData);
+				if (ret === false) {
+					renderAfterSave = false;
+				}
 			}
 
 			Scratch.save();
@@ -462,7 +479,10 @@
 			delete itchData;
 			delete form;
 
-			$(itch).trigger('renderItch');
+			if (renderAfterSave) {
+				$(itch).trigger('renderItch');
+			}
+			
 			return false;
 		});
 	};
@@ -512,16 +532,9 @@
 		zoomer.panzoom({
 			$zoomIn: $("#zoomin"),
 			$zoomOut: $("#zoomout"),
+			$reset: $('#resetzoom'),
 			minScale: 0.2
 		});
-
-		$(document).on('click', '#resetzoom', function() {
-			zoomer.panzoom('resetZoom', {
-				focal: lastZoom
-			});
-
-			Scratch.updateState('current_transform', Scratch.currentTransform());
-		})
 
 		zoomer.parent().on('mousewheel.focal', function(e) {
 			lastZoom = e;
@@ -633,10 +646,16 @@
 							"name" : "labels",
 							"caption" : "Labels (comma separated)",
 							"type" : "text"
+						},
+						{
+							"type" : "submit",
+							"value" : "Update"
 						}
 					];
 					
-					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, 'options')
+					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, null, function (form, data) {
+						itch.attr('title', data.options.title);
+					}, 'options');
 				}
 			},
 			

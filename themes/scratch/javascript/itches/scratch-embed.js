@@ -35,6 +35,7 @@
 					render(itch);
 				})
 			}
+			return false;
 		});
 	};
 
