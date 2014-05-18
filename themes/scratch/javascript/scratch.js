@@ -327,6 +327,7 @@
 	Scratch.deleteItch = function(guid) {
 		var elem = this.$getItch(guid);
 		if (elem.length) {
+			elem.trigger('deleteItch');
 			delete this.ALL_ITCHES[guid];
 			elem.remove();
 			this.save();

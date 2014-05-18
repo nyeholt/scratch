@@ -7,12 +7,16 @@
  * @license BSD License http://www.silverstripe.org/bsd-license
  */
 class Itch extends DataObject {
-	public static $db = array(
+	private static $db = array(
 		'Title'				=> 'Varchar(255)',
 		'Guid'				=> 'Varchar(128)',
 		'LastEditedUTC'		=> 'SS_Datetime',
 		'CreatedUTC'		=> 'SS_Datetime',
 		'ItchData'			=> 'MultiValueField',
+	);
+	
+	private static $summary_fields = array(
+		'Title', 'Guid', 'LastEditedUTC',
 	);
 	
 	public function onBeforeWrite() {

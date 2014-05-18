@@ -8,13 +8,22 @@
  */
 class ScratchService {
 	public function webEnabledMethods() {
-		return array();
+		return array(
+			'updatesSince'	=> 'GET',
+			'save'			=> 'POST',
+			'delete'		=> 'POST',
+		);
 	}
 	
 	public function updatesSince($date) {
 		$date = gmdate('Y-m-d H:i:s', strtotime($date));
 		
-		return $date;
+		$itches = Itch::get()->filter(array(
+			'OwnerID'						=> Member::currentUserID(),
+			'LastEditedUTC:GreaterThan'		=> $date
+		));
+		
+		return $itches;
 	}
 	
 	
@@ -29,7 +38,7 @@ class ScratchService {
 			++$updates;
 			$updateData = $itches[$itch->Guid];
 			unset($updateData['id']);
-			$itch->Title = isset($updateData['data']['title']) ? $updateData['data']['title'] : $itch->Title;
+			$itch->Title = isset($updateData['options']['title']) ? $updateData['options']['title'] : $itch->Title;
 			$itch->ItchData = $updateData;
 			$itch->write();
 			unset($itches[$itch->Guid]);
@@ -40,7 +49,7 @@ class ScratchService {
 			++$newitches;
 			
 			unset($new['id']);
-			$title = isset($new['data']['title']) ? $new['data']['title'] : "Itch $guid";
+			$title = isset($new['options']['title']) ? $new['options']['title'] : "Itch $guid";
 			$itch = Itch::create(array(
 				'Guid'			=> $guid,
 				'Title'			=> $title,

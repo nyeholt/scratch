@@ -3,7 +3,13 @@
 	var api = {
 		'save': '/jsonservice/scratch/save',
 		'load': '/jsonservice/scratch/load',
+		'delete': '/jsonservice/scratch/delete',
 		'updates': '/jsonservice/scratch/updatesSince'
+	};
+	
+	// manually track deletes to push them separately
+	var deletes = {
+		
 	};
 	
 	var updateTimer = null;
@@ -12,21 +18,30 @@
 		var persister = $('.itch-type-Persister').first();
 		if (persister) {
 			var myData = persister.data('itch');
-			
-			myData.data.lastRequest = (new Date()).toUTCString();
-			
-			var save = {
-				itches: Scratch.ALL_ITCHES
-			};
-			
-			$.ajax(myData.data.saveUrl + api.save, {
-				'data': JSON.stringify(save), //{action:'x',params:['a','b','c']}
-				'type': 'POST',
-				'processData': false,
-				'contentType': 'application/json' //typically 'application/x-www-form-urlencoded', but the service you are calling may expect 'text/json'... check with the service to see what they expect as content-type in the HTTP header.
-			}, function (data) {
-				Scratch.log(data);
+			// get any updates since last request
+			$.get(myData.data.saveUrl + api.updates, {
+				'date': myData.data.lastUpdate
+			}, function (updates) {
+				console.log(updates);
+				
+				var save = {
+					itches: Scratch.ALL_ITCHES
+				};
+
+				$.ajax(myData.data.saveUrl + api.save, {
+					'data': JSON.stringify(save), //{action:'x',params:['a','b','c']}
+					'type': 'POST',
+					'processData': false,
+					'contentType': 'application/json', //typically 'application/x-www-form-urlencoded', but the service you are calling may expect 'text/json'... check with the service to see what they expect as content-type in the HTTP header.
+					'success': function (data) {
+						myData.data.lastUpdate = (new Date()).toUTCString();
+						Scratch.save();
+						Scratch.log(myData.data.lastUpdate);
+					}
+				});
 			});
+			
+			
 		}
 	};
 
