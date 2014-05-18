@@ -35,13 +35,12 @@
 					'contentType': 'application/json', //typically 'application/x-www-form-urlencoded', but the service you are calling may expect 'text/json'... check with the service to see what they expect as content-type in the HTTP header.
 					'success': function (data) {
 						myData.data.lastUpdate = (new Date()).toUTCString();
+						delete save;
 						Scratch.save();
 						Scratch.log(myData.data.lastUpdate);
 					}
 				});
 			});
-			
-			
 		}
 	};
 
