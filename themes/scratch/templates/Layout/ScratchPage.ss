@@ -54,6 +54,10 @@
 		<script type="text/template" id="GeneralSettingsForm">
 		<form class="generalSettingsForm itchForm">
 			<div>
+			<label>Title</label>
+			<input type="text" name="title" />
+			</div>
+			<div>
 			<label>Background</label>
 			<input type="text" name="backgroundColor" />
 			</div>

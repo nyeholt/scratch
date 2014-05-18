@@ -222,7 +222,7 @@
 		// we've got existing data to work with
 		var size = [400, 300];
 
-		if (arguments.length == 1 && to.guid) {
+		if (arguments.length == 1 && to.data) {
 			existingData = to;
 			to = $('#' + existingData.tile);
 			pos = existingData.position;
@@ -277,14 +277,16 @@
 		var doSave = false;
 		if (!existingData) {
 			doSave = true;
+			var itchId = this.nextItchId();
 			existingData = {
-				id: this.nextItchId(),
-				
+				id: itchId,
 				tile: $(to).attr('id'),
 				position: pos,
 				type: type,
 				size: size,
-				options: {},
+				options: {
+					title: 'New ' + type + ' itch (#' + itchId +')'
+				},
 				data: {}
 			};
 		}
@@ -615,7 +617,26 @@
 				name: 'Options',
 				execute: function(options) {
 					var itch = $(this);
-					Scratch.editForm(itch, '#GeneralSettingsForm', 'options')
+					
+					var elems = [
+						{
+							"name" : "title",
+							"caption" : "Title",
+							"type" : "text"
+						},
+						{
+							"name" : "backgroundColor",
+							"caption" : "Background Colour",
+							"type" : "text"
+						},
+						{
+							"name" : "labels",
+							"caption" : "Labels (comma separated)",
+							"type" : "text"
+						}
+					];
+					
+					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, 'options')
 				}
 			},
 			
