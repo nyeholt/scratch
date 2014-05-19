@@ -539,6 +539,13 @@
 		});
 
 		zoomer.parent().on('mousewheel.focal', function(e) {
+			var target = $(e.target);
+			
+			// only if we're actually moving a base tile
+			if (!target.is('.basictile')) {
+				return;
+			}
+			
 			lastZoom = e;
 			e.preventDefault();
 			var delta = e.delta || e.originalEvent.wheelDelta;
@@ -579,6 +586,13 @@
 			$('.topitch').removeClass('topitch');
 			$(this).addClass('topitch');
 		});
+		
+		$(document).on('optionsUpdate', '.itch', function () {
+			var itch = $(this);
+			var data = itch.data('itch');
+			itch.attr('title', data.options.title);
+			itch.find('.itch-handle').text(data.options.title);
+		})
 
 		$(document).on('dblclick', '.basictile', function(e) {
 			zoomer.panzoom('resetZoom', {
@@ -661,8 +675,7 @@
 					];
 
 					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, null, function (form, data) {
-						itch.attr('title', data.options.title);
-						itch.find('.itch-handle').text(data.options.title);
+						itch.trigger('optionsUpdate');
 					}, 'options');
 				}
 			},
