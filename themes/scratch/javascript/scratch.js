@@ -626,7 +626,7 @@
 			};
 		});
 
-		var itemMenu = {
+		var defaultGeneralMenu = {
 			"newItch": {
 				name: 'Itch'
 			}
@@ -659,7 +659,7 @@
 							"value" : "Update"
 						}
 					];
-					
+
 					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, null, function (form, data) {
 						itch.attr('title', data.options.title);
 						itch.find('.itch-handle').text(data.options.title);
@@ -690,24 +690,33 @@
 
 		// aannndd some post init stuff that hasn't been cleaned up yet...
 		setTimeout(function() {
-			$(document).trigger('prepareGeneralMenu', itemMenu);
+			$(document).trigger('prepareGeneralMenu', defaultGeneralMenu);
 			$(document).trigger('prepareOptionsMenu', defaultOptionsMenu);
 
 			// this is built here to allow plugins time to actually modify 
 			// the menu items. 
 			$.contextMenu({
 				selector: '.basictile',
-				callback: function(key, options) {
-					if (!lastContext) {
-						return;
-					}
-					if (options.items && options.items[key] && options.items[key].execute) {
-						options.items[key].execute.call(this, options);
-					} else {
-						Scratch.addItch($(lastContext.element), lastContext.position, options.items[key].name);
-					}
-				},
-				items: itemMenu
+				build: function(trigger, e) {
+					var items = $.extend(true, {}, defaultGeneralMenu);
+					
+					// add any specific ones in
+					$(document).trigger('updateGeneralMenu', items);
+
+					return {
+						callback: function(key, options) {
+							if (!lastContext) {
+								return;
+							}
+							if (options.items && options.items[key] && options.items[key].execute) {
+								options.items[key].execute.call(this, options);
+							} else {
+								Scratch.addItch($(lastContext.element), lastContext.position, options.items[key].name);
+							}
+						},
+						items: items
+					};
+				}
 			});
 
 			$.contextMenu({
@@ -719,7 +728,7 @@
 					var items = $.extend(true, {}, defaultOptionsMenu);
 					
 					// add any specific ones in
-					itchElem.trigger('itemOptionMenu', items);
+					itchElem.trigger('updateItemOptionMenu', items);
 
 					return {
 						callback: generalHandler,

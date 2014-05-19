@@ -68,8 +68,7 @@
 		items['importexport'] = { name: "ImportExport" };
 	});
 
-	$(document).on('itemOptionMenu', function (e, items) {
-		
+	$(document).on('updateItemOptionMenu', function (e, items) {
 		if (!items.export && $('.itch-type-ImportExport').length > 0) {
 			items.export = {
 				name: "Export",
