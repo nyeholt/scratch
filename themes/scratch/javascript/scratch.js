@@ -307,6 +307,7 @@
 		
 		if (existingData.options.title) {
 			itch.attr('title', existingData.options.title);
+			itch.find('.itch-handle').text(existingData.options.title);
 		}
 
 //		$(document).trigger('itchCreated');
@@ -432,13 +433,13 @@
 		} else {
 			// see https://github.com/daffl/jquery.dform
 			if (!templateId.html) {
-				templateId.push({
-					type: 'div',
-					html: [{
-						type: 'submit',
-						value: 'Save'
-					}]
-				})
+//				templateId.push({
+//					type: 'div',
+//					html: [{
+//						type: 'submit',
+//						value: 'Save'
+//					}]
+//				})
 				templateId = {
 					'action': '#',
 					'method': 'post',
@@ -656,6 +657,7 @@
 					
 					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, null, function (form, data) {
 						itch.attr('title', data.options.title);
+						itch.find('.itch-handle').text(data.options.title);
 					}, 'options');
 				}
 			},
