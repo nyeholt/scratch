@@ -11,21 +11,35 @@
 	var deletes = {
 		
 	};
-	
+
 	var updateTimer = null;
 	
 	var scratchUpdates = function () {
 		var persister = $('.itch-type-Persister').first();
 		if (persister) {
+			
 			var myData = persister.data('itch');
+			
+			if (!myData) {
+				Scratch.log("Itch is null");
+				Scratch.log(persister);
+				return;
+			}
+			
+			if (!myData.data.lastUpdate) {
+				myData.data.lastUpdate = Scratch.state.lastSaved;
+			}
+			
 			// get any updates since last request
 			$.get(myData.data.saveUrl + api.updates, {
 				'date': myData.data.lastUpdate
 			}, function (updates) {
-				console.log(updates);
+				
+				var toSave = JSON.stringify(Scratch.ALL_ITCHES);
+				toSave = JSON.parse(toSave);
 				
 				var save = {
-					itches: Scratch.ALL_ITCHES
+					itches: toSave
 				};
 
 				$.ajax(myData.data.saveUrl + api.save, {
@@ -37,7 +51,6 @@
 						myData.data.lastUpdate = (new Date()).toUTCString();
 						delete save;
 						Scratch.save();
-						Scratch.log(myData.data.lastUpdate);
 					}
 				});
 			});
@@ -84,29 +97,12 @@
 		var body = itch.find('.itch-body');
 		body.empty();
 		
-		body.dform({
-			type: 'div',
-			html: [
-			{
-				type: 'textarea',
-				rows: 10,
-				caption: "Item to save/load",
-				class: 'itch-saver'
-			},
-			{
-				type: 'button',
-				class: 'load-button',
-				html: 'Load'
-			}
-			]
-		});
-		
 		if (!updateTimer) {
 			createTimer(itchData);
 		}
 
-		if (itchData.data.saveUrl) {
-//			body.append('Saving to ' + itchData.data.saveUrl);
+		if (!itchData.data.saveUrl) {
+			body.append('No endpoint specified, no updates will occur');
 		}
 	};
 
@@ -133,37 +129,10 @@
 			createTimer(itchData);
 		});
 	};
-	
-	$(document).on('click', '.load-button', function (e) {
-		var data = $(this).siblings('textarea').val();
-		if (data) {
-			var restored = JSON.parse(Base64.decode(data));
-			restoreItch(restored);
-		}
-	});
 
 	$(document).on('prepareGeneralMenu', function (e, items) {
 		items['saver'] = { name: "Persister" };
 	});
-
-	$(document).on('prepareOptionsMenu', function (e, items) {
-		if (!items.export) {
-			items.export = {
-				name: "Export",
-				execute: function(o) {
-					var itch = $(this).data('itch');
-					var clone = JSON.stringify(itch);
-					clone = JSON.parse(clone);
-					delete clone['id'];
-
-					var encoded = Base64.encode(JSON.stringify(clone));
-
-					var saveTo = $('.itch-saver').first();
-					saveTo.val(encoded);
-				}
-			};
-		}
-	})
 
 	$(document).on('itchCreated', '.itch-type-Persister', function () {
 		if ($('.itch-type-Persister').length > 1) {

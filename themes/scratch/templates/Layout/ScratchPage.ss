@@ -27,6 +27,7 @@
 		<script src="themes/scratch/javascript/itches/scratch-embed.js"></script>
 		<script src="themes/scratch/javascript/itches/scratch-rss.js"></script>
 		<script src="themes/scratch/javascript/itches/scratch-saver.js"></script>
+		<script src="themes/scratch/javascript/itches/scratch-importexport.js"></script>
 		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />
