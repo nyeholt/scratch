@@ -125,3 +125,6 @@ Overrides
 	display: block;
 }
 
+.topitch {
+	z-index: 100;
+}
