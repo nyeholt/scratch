@@ -86,7 +86,7 @@
 
 	$(document).on('itchCreated', typeClass, function() {
 		$(this).removeClass('initialising');
-		renderOptions($(this));
+		render($(this));
 	})
 
 	$(document).on('renderItch', typeClass, function() {

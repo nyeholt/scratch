@@ -19,6 +19,10 @@
 				}
 			}
 		}
+		
+		if (info.data.scratch_title) {
+			$('title').text(info.data.scratch_title);
+		}
 
 		itch.find('.itch-body').html('Scripts loaded');
 	};
@@ -26,11 +30,17 @@
 	var renderOptions = function (itch) {
 		var elems = [
 			{
+				type: 'text',
+				name: 'scratch_title',
+				caption: 'Title of this scratch',
+			},
+			{
 				type: 'textarea',
 				name: 'itches',
 				caption: 'Newline separated list of external itches to include',
 				rows: 15
 			},
+			
 			{
 				type: 'submit',
 				value: 'Update'
