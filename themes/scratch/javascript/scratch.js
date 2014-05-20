@@ -59,6 +59,10 @@
 		if (state) {
 			this.state = state;
 		}
+		
+		if (!this.state.scratchId) {
+			this.updateState('scratchId', Scratch.GUID());
+		}
 
 		var itches = scratchStore.get('itches');
 		if (itches) {
@@ -388,6 +392,10 @@
 		
 		if (!existingData.guid) {
 			existingData.guid = Scratch.GUID();
+		}
+		
+		if (!existingData.scratchId) {
+			existingData.scratchId = this.state.scratchId;
 		}
 
 		this.ALL_ITCHES[existingData.guid] = existingData;
