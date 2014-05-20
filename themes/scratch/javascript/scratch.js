@@ -9,9 +9,16 @@
 	var ITCH_CLASS = 'itch';
 
 	var CONTAINER = '.panzoom';
+	
+	var scratchStore = null;
+	
+	var itchWrappers = {};
+	
+	var defaultWrapper = function (itchData) {
+		this.itchData = itchData;
+	};
 
 	var Scratch = {
-		store: null,
 		ALL_TILES: {},
 		ALL_ITCHES: {},
 		// what is our current itch ID?
@@ -21,7 +28,7 @@
 	};
 
 	Scratch.setStore = function(store) {
-		this.store = store;
+		scratchStore = store;
 	}
 
 	Scratch.log = function(msg) {
@@ -31,16 +38,16 @@
 	}
 
 	Scratch.init = function() {
-		if (!this.store) {
+		if (!scratchStore) {
 			alert("No storage specified");
 		}
 
-		var state = this.store.get('scratch_state');
+		var state = scratchStore.get('scratch_state');
 		if (state) {
 			this.state = state;
 		}
 
-		var itches = this.store.get('itches');
+		var itches = scratchStore.get('itches');
 		if (itches) {
 			this.ALL_ITCHES = itches;
 		}
@@ -66,10 +73,17 @@
 
 	Scratch.save = function() {
 		this.state.lastSaved = (new Date()).toUTCString();
-		this.store.save('scratch_state', this.state);
-		this.store.save('itches', this.ALL_ITCHES);
+		scratchStore.save('scratch_state', this.state);
+		scratchStore.save('itches', this.ALL_ITCHES);
 	};
 
+	/**
+	 * Update a global system state variable
+	 * 
+	 * @param string option
+	 * @param mixed value
+	 * @returns null
+	 */
 	Scratch.updateState = function(option, value) {
 		var newOpts = {};
 		if (typeof option === 'string') {
@@ -81,10 +95,48 @@
 		$.extend(this.state, newOpts);
 
 		this.save();
+	};
+	
+	/**
+	 * Add an object constructor to be used for more indepth logic if needed
+	 * around an itch
+	 * 
+	 * @param string type
+	 *			The itch type
+	 * @param function ctor
+	 *			The constructor used to create a wrapper instance around an itch if
+	 *			Scratch.wrap(itchData) is called
+	 * @returns {undefined}
+	 */
+	Scratch.addWrapper = function (type, ctor) {
+		itchWrappers[type] = ctor;
+		
+	};
+	
+	/**
+	 * Wrap an itch data wrapper. 
+	 * 
+	 * @param object itchData
+	 * @returns object
+	 */
+	Scratch.wrap = function (itchData) {
+		var type = itchData.type;
+		if (!type) {
+			throw "Attempted to wrap invalid itch data";
+		}
+		
+		var ctor = itchWrappers[type];
+		if (!ctor) {
+			ctor = defaultWrapper;
+		}
+		
+		var wrapped = new ctor(itchData);
+		
+		return wrapped;
 	}
 
 	/**
-	 * Initialise the origin point
+	 * Initialise the origin tile
 	 * 
 	 * @param {type} startPoint
 	 * @returns {undefined}
@@ -99,6 +151,12 @@
 		return this.addTile(null, startPoint);
 	}
 
+	/**
+	 * Add a base tile that acts as a container for the itches
+	 * @param string|element relativeElem
+	 * @param array relativePos
+	 * @returns 
+	 */
 	Scratch.addTile = function(relativeElem, relativePos) {
 		var currentPos = {top: 0, left: 0};
 		var newRelPos = [0, 0];
@@ -376,8 +434,8 @@
 	 */
 	Scratch.hardKill = function() {
 		if (confirm('Sure?')) {
-			this.store.remove('scratch_state');
-			this.store.remove('itches');
+			scratchStore.remove('scratch_state');
+			scratchStore.remove('itches');
 			location.reload();
 		}
 	}
@@ -433,13 +491,6 @@
 		} else {
 			// see https://github.com/daffl/jquery.dform
 			if (!templateId.html) {
-//				templateId.push({
-//					type: 'div',
-//					html: [{
-//						type: 'submit',
-//						value: 'Save'
-//					}]
-//				})
 				templateId = {
 					'action': '#',
 					'method': 'post',
@@ -499,6 +550,11 @@
 	
 	Scratch.GUID = function() {
 		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+	}
+	
+	Scratch.clone = function (data) {
+		var cloned = JSON.stringify(data);
+		return JSON.parse(cloned);
 	}
 
 

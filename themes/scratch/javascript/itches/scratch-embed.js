@@ -32,8 +32,11 @@
 				body.html(itchData.data.embedInfo.media.html);
 			} else if (info.content) {
 				body.html(info.content)
-			}
-			
+			} else if (info.images) {
+				$(info.images).each(function () {
+					body.append('<div><a href="' + this.url +'" target="_blank"><img src="' + this.url + '" title="' + this.caption + '" /></a><p>'+ this.caption + '</p></div>')
+				})
+			} 
 
 //			$.get('jsonservice/socialGraph/convertUrl', {remoteUrl: itchData.data.url}, function (data) {
 //				if (data && data.response && data.response.Content) {
@@ -109,4 +112,15 @@
 			renderOptions(itch);
 		}
 	});
+	
+	var embedWrapper = function (itchData) {
+		this.itchData = itchData;
+	};
+	
+	embedWrapper.prototype.forExport = function () {
+		return this.itchData;
+	};
+	
+	Scratch.addWrapper('Embed', embedWrapper);
+	
 })(jQuery);
