@@ -29,9 +29,9 @@
 		
 <!--		<script src="themes/scratch/javascript/itches/itch-embed.js"></script>-->
 		
-		<script src="themes/scratch/javascript/itches/itch-rss.js"></script>
-		<script src="themes/scratch/javascript/itches/itch-saver.js"></script>
-		<script src="themes/scratch/javascript/itches/itch-importexport.js"></script>
+<!--		<script src="themes/scratch/javascript/itches/itch-rss.js"></script>-->
+<!--		<script src="themes/scratch/javascript/itches/itch-saver.js"></script>
+		<script src="themes/scratch/javascript/itches/itch-importexport.js"></script>-->
 		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />

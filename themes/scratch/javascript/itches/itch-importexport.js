@@ -102,7 +102,7 @@
 	$(document).on('renderItch', typeClass, function () {
 		render($(this));
 	});
-	
+
 	$(document).on('click', typeClass + ' .itch-handle', function () {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
@@ -110,5 +110,12 @@
 		} else {
 			renderOptions(itch);
 		}
+	});
+	
+	/**
+	 * on addition to the page, make sure to load the itches up
+	 */
+	$(function () {
+		Scratch.typeLoaded(type);
 	});
 })(jQuery);

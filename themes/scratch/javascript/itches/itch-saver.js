@@ -157,4 +157,11 @@
 			renderOptions(itch);
 		}
 	});
+	
+	/**
+	 * on addition to the page, make sure to load the itches up
+	 */
+	$(function () {
+		Scratch.typeLoaded(type);
+	});
 })(jQuery);

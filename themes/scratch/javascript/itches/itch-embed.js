@@ -122,9 +122,7 @@
 	});
 	
 	$(function () {
-		$(typeClass + '.initialising').each (function () {
-			$(this).trigger('itchCreated');
-		})
+		Scratch.typeLoaded(type);
 	});
 	
 })(jQuery);

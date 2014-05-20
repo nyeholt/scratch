@@ -14,7 +14,7 @@
 				if (!loadedScripts[s]) {
 					loadedScripts[s] = true;
 					Scratch.loadScript(s).done(function () {
-						itch.find('.itch-body').prepend("<p>Loaded " + s + '</p>');
+						itch.find('.itch-body').prepend("<p>Loaded " + this.url + '</p>');
 					});
 				}
 			}

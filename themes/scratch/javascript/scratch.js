@@ -603,10 +603,22 @@
 		});
 	};
 	
+	/**
+	 * Load an external script file
+	 * 
+	 * @param string src
+	 * @returns jqXHR
+	 */
 	Scratch.loadScript = function (src) {
 		return $.getScript(src);
 	};
 	
+	/**
+	 * Load an external CSS File
+	 * 
+	 * @param string css
+	 * @returns {undefined}
+	 */
 	Scratch.loadCss = function (css) {
 		var elem = $('<link>');
 		elem.attr({
@@ -618,7 +630,26 @@
 		$('head').append(elem);
 	};
 	
-
+	/**
+	 * Call in a $(function () {}); block inside an externally 
+	 * loaded script to ensure that elements it provides functionality
+	 * for are taken into account. 
+	 * 
+	 * @param string type
+	 * @returns null
+	 */
+	Scratch.typeLoaded = function (type) {
+		$('.itch-type-' + type + '.initialising').each (function () {
+			$(this).trigger('itchCreated');
+		})
+	}
+	
+	/**
+	 * Add a loading animation into an element
+	 * 
+	 * @param {type} elem
+	 * @returns {undefined}
+	 */
 	Scratch.loading = function(elem) {
 		elem.html('<div class="ajax-loader"><img src="themes/scratch/images/712.png" /></div>');
 	}
