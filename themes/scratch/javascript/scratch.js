@@ -89,6 +89,12 @@
 		scratchStore.save('scratch_state', this.state);
 		scratchStore.save('itches', this.ALL_ITCHES);
 	};
+	
+	Scratch.forExport = function () {
+		return {
+			itches: this.ALL_ITCHES
+		};
+	}
 
 	/**
 	 * Update a global system state variable

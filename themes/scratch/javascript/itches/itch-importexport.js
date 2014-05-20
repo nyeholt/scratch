@@ -41,6 +41,11 @@
 				type: 'button',
 				class: 'load-button',
 				html: 'Load'
+			},
+			{
+				type: 'button',
+				class: 'save-button',
+				html: 'Export all'
 			}
 			]
 		});
@@ -57,6 +62,14 @@
 //		});
 	};
 
+
+	$(document).on('click', '.save-button', function (e) {
+		var text = JSON.stringify(Scratch.forExport());
+		text = Base64.encode(text);
+		var pom = $('<a>');
+		var url = 'data:application/json;charset=utf-8;base64,' + (text) + '';
+		window.open(url);
+	});
 
 	$(document).on('click', '.load-button', function (e) {
 		var data = $(this).siblings('textarea').val();
@@ -88,7 +101,12 @@
 				}
 			};
 		}
-	})
+	});
+	
+	$(document).on('loadItch', function (e, itchData) {
+		console.log("Load itch data");
+		console.log(itchData);
+	});
 
 	$(document).on('itchCreated', typeClass, function () {
 		$(this).removeClass('initialising');
@@ -96,7 +114,7 @@
 			alert("Only the first created importer will actually function!");
 		}
 
-		renderOptions($(this));
+		render($(this));
 	})
 	
 	$(document).on('renderItch', typeClass, function () {
