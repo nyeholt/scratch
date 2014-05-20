@@ -1,20 +1,9 @@
 ;
 (function($) {
+	var type = 'embed';
+	var typeClass = '.itch-type-' + type;
+	
 	var loaded = false;
-	
-	var getEmbedlyId = function () {
-		var embedlyId = $('#EmbedlyId');
-		return embedlyId.val();
-	}
-	
-	var saveEmbedlyId = function (id) {
-		var elem = $('#EmbedlyId');
-		if (elem.length === 0) {
-			elem = $('<input type="hidden" id="EmbedlyId" />');
-			$('body').append(elem);
-		}
-		elem.val(id);
-	}
 
 	var render = function(itch) {
 		var itchData = itch.data('itch');
@@ -50,8 +39,6 @@
 	};
 
 	var renderOptions = function(itch) {
-		var embedlyId = getEmbedlyId();
-		
 		var elems = [
 			{
 				type: 'url',
@@ -94,18 +81,19 @@
 	};
 
 	$(document).on('prepareGeneralMenu', function(e, items) {
-		items['embed'] = {name: "Embed"};
+		items[type] = {name: "Embed"};
 	});
 
-	$(document).on('itchCreated', '.itch-type-Embed', function() {
+	$(document).on('itchCreated', typeClass, function() {
+		$(this).removeClass('initialising');
 		renderOptions($(this));
 	})
 
-	$(document).on('renderItch', '.itch-type-Embed', function() {
+	$(document).on('renderItch', typeClass, function() {
 		render($(this));
 	});
 
-	$(document).on('click', '.itch-type-Embed .itch-handle', function() {
+	$(document).on('click', typeClass + ' .itch-handle', function() {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
 			render(itch);
@@ -113,19 +101,30 @@
 			renderOptions(itch);
 		}
 	});
-	
+
+	/**
+	 * Class file for the wrapper around Embed itches
+	 * 
+	 * @param object itchData
+	 * @returns {_L2.embedWrapper}
+	 */
 	var embedWrapper = function (itchData) {
 		this.itchData = itchData;
 	};
-	
 	embedWrapper.prototype.forExport = function () {
 		return this.itchData;
 	};
 	
-	Scratch.addWrapper('Embed', embedWrapper);
+	Scratch.addWrapper(type, embedWrapper);
 	
 	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.embedly-3.1.1.min.js").done(function () {
 		loaded = true;
-	})
+	});
+	
+	$(function () {
+		$(typeClass + '.initialising').each (function () {
+			$(this).trigger('itchCreated');
+		})
+	});
 	
 })(jQuery);

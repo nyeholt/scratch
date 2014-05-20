@@ -1,6 +1,7 @@
 ;
 (function($) {
-	
+	var type = 'rss';
+	var typeClass = '.itch-type-' + type;
 
 	var parserss = function (url, container) {
 		$.ajax({
@@ -41,18 +42,19 @@
 
 	
 	$(document).on('prepareGeneralMenu', function (e, items) {
-		items['rss'] = { name: "RSS" };
+		items[type] = { name: "RSS" };
 	});
 
-	$(document).on('itchCreated', '.itch-type-RSS', function() {
+	$(document).on('itchCreated', typeClass, function() {
+		$(this).removeClass('initialising');
 		renderOptions($(this));
 	})
 
-	$(document).on('renderItch', '.itch-type-RSS', function() {
+	$(document).on('renderItch', typeClass, function() {
 		render($(this));
 	});
 
-	$(document).on('click', '.itch-type-RSS .itch-handle', function() {
+	$(document).on('click', typeClass + ' .itch-handle', function() {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
 			render(itch);
@@ -60,10 +62,10 @@
 			renderOptions(itch);
 		}
 	});
-	
+
 	// reload all itches every 10 minutes
 	setInterval(function () {
-		$('.itch-type-RSS').each(function () {
+		$(typeClass).each(function () {
 			var itch = $(this);
 			if (itch.find('.itchForm').length == 0) {
 				render(itch);

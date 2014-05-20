@@ -1,4 +1,7 @@
 ;(function ($) {
+	var type = 'importexport';
+	var typeClass = '.itch-type-' + type;
+	
 	/**
 	 * Restore an itch from an object
 	 * 
@@ -65,11 +68,11 @@
 	
 
 	$(document).on('prepareGeneralMenu', function (e, items) {
-		items['importexport'] = { name: "ImportExport" };
+		items[type] = { name: "Import / Export" };
 	});
 
 	$(document).on('updateItemOptionMenu', function (e, items) {
-		if (!items.export && $('.itch-type-ImportExport').length > 0) {
+		if (!items.export && $(typeClass).length > 0) {
 			items.export = {
 				name: "Export",
 				execute: function(o) {
@@ -87,7 +90,8 @@
 		}
 	})
 
-	$(document).on('itchCreated', '.itch-type-ImportExport', function () {
+	$(document).on('itchCreated', typeClass, function () {
+		$(this).removeClass('initialising');
 		if ($('.itch-type-Persister').length > 1) {
 			alert("Only the first created importer will actually function!");
 		}
@@ -95,11 +99,11 @@
 		renderOptions($(this));
 	})
 	
-	$(document).on('renderItch', '.itch-type-ImportExport', function () {
+	$(document).on('renderItch', typeClass, function () {
 		render($(this));
 	});
 	
-	$(document).on('click', '.itch-type-ImportExport .itch-handle', function () {
+	$(document).on('click', typeClass + ' .itch-handle', function () {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
 			render(itch);

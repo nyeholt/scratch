@@ -63,6 +63,7 @@ Overrides
 	border-radius: 5px;
 	box-shadow: 0px 0px 10px #555;
 	overflow: hidden;
+	cursor: move;
 }
 
 .itch img {
@@ -79,7 +80,7 @@ Overrides
 	text-align: center;
 	border: 1px solid #000;
 	background-color: #ddd;
-	cursor: crosshair;
+	cursor: pointer;
 }
 
 .itch-handle {
@@ -104,6 +105,7 @@ Overrides
 	min-height: 70%;
 	max-height: 95%;
 	overflow: auto;
+	cursor: auto;
 }
 
 .ajax-loader {

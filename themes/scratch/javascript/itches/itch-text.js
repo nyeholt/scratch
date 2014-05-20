@@ -20,22 +20,22 @@
 		Scratch.editForm(itch, '#ItchEditForm');
 	}
 	
-	$(document).on('itchCreated', '.itch-type-Itch', function () {
+	$(document).on('itchCreated', '.itch-type-itch', function () {
+		$(this).removeClass('initialising');
 		renderOptions($(this));
 	})
 	
-	$(document).on('renderItch', '.itch-type-Itch', function () {
+	$(document).on('renderItch', '.itch-type-itch', function () {
 		render($(this));
 	});
 	
-	$(document).on('click', '.itch-type-Itch .itch-handle', function () {
+	$(document).on('click', '.itch-type-itch .itch-handle', function () {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
 			render(itch);
 		} else {
 			renderOptions(itch);
 		}
-		
 	});
 	
 	Scratch.loadScript("themes/scratch/javascript/markdown-0.6.1/markdown.js").done(function () {

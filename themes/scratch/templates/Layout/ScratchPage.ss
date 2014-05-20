@@ -20,9 +20,6 @@
 		
 		
 		<!-- itch specific dependencies -->
-		
-		
-
 		<script src="themes/scratch/javascript/scratch.js"></script>
 		<script src="themes/scratch/javascript/scratch-local-storage.js"></script>
 		

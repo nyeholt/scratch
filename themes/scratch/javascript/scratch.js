@@ -12,6 +12,19 @@
 	
 	var scratchStore = null;
 	
+	/**
+	 * A list of all the itches that users can create
+	 * 
+	 * @type object
+	 */
+	var itchTypes = {};
+	
+	/**
+	 * A list of wrappers for various itches. Not all types have
+	 * a wrapper so there's a default provided
+	 * 
+	 * @type object
+	 */
 	var itchWrappers = {};
 	
 	var defaultWrapper = function (itchData) {
@@ -97,6 +110,16 @@
 		this.save();
 	};
 	
+	/**
+	 * Addons should register the type they expose
+	 * 
+	 * @param object typeInfo
+	 * @returns void
+	 */
+	Scratch.registerType = function (typeInfo) {
+		itchTypes[typeInfo.type] = typeInfo;
+	};
+
 	/**
 	 * Add an object constructor to be used for more indepth logic if needed
 	 * around an itch
@@ -311,7 +334,7 @@
 				width: size[0],
 				height: size[1]
 			})
-			.addClass('itch-type-' + type);
+			.addClass('itch-type-' + type).addClass('initialising');
 
 		itch.appendTo(to);
 		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
@@ -319,12 +342,18 @@
 		// bind events
 		itch.draggable({
 //			handle: '.itch-handle',
+//			start: function(event, ui) {
+//				if (!$(event.toElement).hasClass('itch')) {
+//					return false;
+//				}
+//			},
+			cancel: '.itch-body',
 			stop: function(event, ui) {
 				// note: This is handled in the drop handler above to prevent problems with the
 				// new parent elem not being tracked
-//				var itch = ui.helper.data('itch');
-//				itch.position = [ui.position.top, ui.position.left];
-//				Scratch.save();
+				//				var itch = ui.helper.data('itch');
+				//				itch.position = [ui.position.top, ui.position.left];
+				//				Scratch.save();
 			}
 		}).resizable({
 			stop: function(event, ui) {
@@ -368,7 +397,6 @@
 			itch.find('.itch-handle').text(existingData.options.title);
 		}
 
-//		$(document).trigger('itchCreated');
 		$(itch).trigger('itchCreated');
 		$(itch).trigger('renderItch');
 
@@ -748,7 +776,7 @@
 		});
 
 		var defaultGeneralMenu = {
-			"newItch": {
+			"itch": {
 				name: 'Itch'
 			}
 		};
@@ -831,7 +859,7 @@
 							if (options.items && options.items[key] && options.items[key].execute) {
 								options.items[key].execute.call(this, options);
 							} else {
-								Scratch.addItch($(lastContext.element), lastContext.position, options.items[key].name);
+								Scratch.addItch($(lastContext.element), lastContext.position, key);
 							}
 						},
 						items: items

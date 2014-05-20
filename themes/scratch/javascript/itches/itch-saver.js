@@ -1,4 +1,6 @@
 ;(function ($) {
+	var type = 'persister';
+	var typeClass = '.itch-type-' + type;
 	
 	var api = {
 		'save': '/jsonservice/scratch/save',
@@ -15,7 +17,7 @@
 	var updateTimer = null;
 	
 	var scratchUpdates = function () {
-		var persister = $('.itch-type-Persister').first();
+		var persister = $(typeClass).first();
 		if (persister) {
 			
 			var myData = persister.data('itch');
@@ -131,10 +133,11 @@
 	};
 
 	$(document).on('prepareGeneralMenu', function (e, items) {
-		items['saver'] = { name: "Persister" };
+		items[type] = { name: "Persister" };
 	});
 
-	$(document).on('itchCreated', '.itch-type-Persister', function () {
+	$(document).on('itchCreated', typeClass, function () {
+		$(this).removeClass('initialising');
 		if ($('.itch-type-Persister').length > 1) {
 			alert("Only the first created persister will actually function!");
 		}
@@ -142,11 +145,11 @@
 		renderOptions($(this));
 	})
 	
-	$(document).on('renderItch', '.itch-type-Persister', function () {
+	$(document).on('renderItch', typeClass, function () {
 		render($(this));
 	});
 	
-	$(document).on('click', '.itch-type-Persister .itch-handle', function () {
+	$(document).on('click', typeClass + ' .itch-handle', function () {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
 			render(itch);
