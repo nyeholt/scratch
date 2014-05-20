@@ -3,9 +3,7 @@
 	var loaded = false;
 	
 	var render = function (itch) {
-		
 		// check if markdown is loaded yet
-		
 		var info = itch.data('itch');
 		if (info.data && info.data.content && loaded) {
 			var src = markdown.toHTML(info.data.content);
@@ -43,6 +41,4 @@
 	Scratch.loadScript("themes/scratch/javascript/markdown-0.6.1/markdown.js").done(function () {
 		loaded = true;
 	});
-	// <script src=></script>
-	
 })(jQuery);
