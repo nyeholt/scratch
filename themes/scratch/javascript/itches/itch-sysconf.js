@@ -22,7 +22,7 @@
 				}
 			}
 		}
-		
+
 		if (info.data && info.data.syles) {
 			var toLoad = info.data.syles.split("\n");
 			for (var i = 0, c = toLoad.length; i < c; i++) {
@@ -90,6 +90,8 @@
 		} else {
 			renderOptions(itch);
 		}
-		
 	});
+
+	Scratch.loadScript('themes/scratch/javascript/spectrum/spectrum.js');
+	Scratch.loadCss('themes/scratch/javascript/spectrum/spectrum.css');
 })(jQuery);

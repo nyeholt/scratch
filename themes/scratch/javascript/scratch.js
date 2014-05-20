@@ -748,6 +748,12 @@
 			});
 		})
 
+		$.dform.addType("color", function(options) {
+			// Return a new button element that has all options that
+			// don't have a registered subscriber as attributes
+			return $('<input type="color" />').dform('attr', options);
+		});
+
 		$(document).on('click', '.basictile', function(e) {
 			if ($(e.target).hasClass('basictile')) {
 				Scratch.closeItches();
@@ -833,7 +839,7 @@
 						{
 							"name" : "backgroundColor",
 							"caption" : "Background Colour",
-							"type" : "text"
+							"type" : "color"
 						},
 						{
 							"name" : "labels",
