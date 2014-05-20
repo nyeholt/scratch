@@ -21,7 +21,7 @@
 		
 		<!-- itch specific dependencies -->
 		<script type="text/javascript" src="themes/scratch/javascript/jquery/jquery.embedly-3.1.1.min.js"></script>
-		<script src="themes/scratch/javascript/markdown-0.6.1/markdown.js"></script>
+		
 
 		<script src="themes/scratch/javascript/scratch.js"></script>
 		<script src="themes/scratch/javascript/scratch-local-storage.js"></script>

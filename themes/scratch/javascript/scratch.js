@@ -416,6 +416,12 @@
 		return zoomer.panzoom('getMatrix');
 	};
 	
+	/**
+	 * Pan to a specific itch object
+	 * 
+	 * @param object itch
+	 * @returns null
+	 */
 	Scratch.panToItch = function (itch) {
 		var top = parseInt(itch.parent().css('top'));
 		var left = parseInt(itch.parent().css('left'));
@@ -440,6 +446,13 @@
 		}
 	}
 
+	/**
+	 * Bind data to a specific form object
+	 * 
+	 * @param {type} data
+	 * @param {type} form
+	 * @returns {undefined}
+	 */
 	Scratch.bindToForm = function(data, form) {
 		try {
 			form.populate(data);
@@ -448,6 +461,14 @@
 		}
 	}
 
+	/**
+	 * 
+	 * Binds form data into a specified object
+	 * 
+	 * @param object data
+	 * @param jquery form
+	 * @returns null
+	 */
 	Scratch.loadFromForm = function(data, form) {
 		var object = form.serializeJSON();
 		for (var key in object) {
@@ -471,7 +492,21 @@
 		})
 	};
 
-
+	
+	/**
+	 * 
+	 * @param jqueryelement itch
+	 *				The itch element to edit data for
+	 * @param string|array templateId
+	 *				A jquery identifier, OR array of jquery dform elements representing the form
+	 * @param callback beforeEdit
+	 *				A callback called before editing the object
+	 * @param callback afterEdit
+	 *				A callback called after editing the object
+	 * @param string propertySet
+	 *				Which set of properties on the itch to edit - defaults to 'data'
+	 * @returns null
+	 */
 	Scratch.editForm = function(itch, templateId, beforeEdit, afterEdit, propertySet) {
 		if (typeof beforeEdit === 'string') {
 			propertySet = beforeEdit;
@@ -539,6 +574,22 @@
 			return false;
 		});
 	};
+	
+	Scratch.loadScript = function (src) {
+		return $.getScript(src);
+	};
+	
+	Scratch.loadCss = function (css) {
+		var elem = $('<link>');
+		elem.attr({
+			rel:  "stylesheet",
+			type: "text/css",
+			href: css
+		});
+		
+		$('head').append(elem);
+	};
+	
 
 	Scratch.loading = function(elem) {
 		elem.html('<div class="ajax-loader"><img src="themes/scratch/images/712.png" /></div>');
