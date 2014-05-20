@@ -74,18 +74,5 @@
 			<input type="submit" value="OK" />
 		</form>
 		</script>
-		
-		<script type="text/template" id="ItchEditForm">
-		<form class="itchEditForm itchForm">
-			<textarea name="content" rows="10"></textarea>
-			<input type="submit" value="Done" />
-		</form>
-		</script>
-
-		<script type="text/template" id="EmbedEditForm">
-		<form class="embedEditForm itchForm">
-			<input type="text" name="url" rows="10" />
-		</form>
-		</script>
 	</body>
 </html>

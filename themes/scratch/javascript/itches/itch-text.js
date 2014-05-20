@@ -1,4 +1,6 @@
 ;(function ($) {
+	var type = 'itch';
+	var typeClass = '.itch-type-' + type;
 	
 	var loaded = false;
 	
@@ -17,19 +19,31 @@
 	};
 
 	var renderOptions = function (itch) {
-		Scratch.editForm(itch, '#ItchEditForm');
+		// <textarea name="content" rows="10"></textarea>
+		var elems = [
+			{
+				type: 'textarea',
+				name: 'content',
+				caption: 'Markdown content'
+			},
+			{
+				type: 'submit',
+				value: 'Update'
+			}
+		];
+		Scratch.editForm(itch, elems);
 	}
 	
-	$(document).on('itchCreated', '.itch-type-itch', function () {
+	$(document).on('itchCreated', typeClass, function () {
 		$(this).removeClass('initialising');
 		renderOptions($(this));
 	})
 	
-	$(document).on('renderItch', '.itch-type-itch', function () {
+	$(document).on('renderItch', typeClass, function () {
 		render($(this));
 	});
 	
-	$(document).on('click', '.itch-type-itch .itch-handle', function () {
+	$(document).on('click', typeClass + ' .itch-handle', function () {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
 			render(itch);
