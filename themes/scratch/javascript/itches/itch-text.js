@@ -15,7 +15,7 @@
 			}, 1000);
 		}
 	};
-	
+
 	var renderOptions = function (itch) {
 		Scratch.editForm(itch, '#ItchEditForm');
 	}

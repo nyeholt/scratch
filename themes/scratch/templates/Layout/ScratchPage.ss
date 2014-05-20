@@ -20,17 +20,21 @@
 		
 		
 		<!-- itch specific dependencies -->
-		<script type="text/javascript" src="themes/scratch/javascript/jquery/jquery.embedly-3.1.1.min.js"></script>
+		
 		
 
 		<script src="themes/scratch/javascript/scratch.js"></script>
 		<script src="themes/scratch/javascript/scratch-local-storage.js"></script>
 		
-		<script src="themes/scratch/javascript/itches/scratch-itch.js"></script>
-		<script src="themes/scratch/javascript/itches/scratch-embed.js"></script>
-		<script src="themes/scratch/javascript/itches/scratch-rss.js"></script>
-		<script src="themes/scratch/javascript/itches/scratch-saver.js"></script>
-		<script src="themes/scratch/javascript/itches/scratch-importexport.js"></script>
+		<script src="themes/scratch/javascript/itches/itch-sysconf.js"></script>
+		
+		<script src="themes/scratch/javascript/itches/itch-text.js"></script>
+		
+<!--		<script src="themes/scratch/javascript/itches/itch-embed.js"></script>-->
+		
+		<script src="themes/scratch/javascript/itches/itch-rss.js"></script>
+		<script src="themes/scratch/javascript/itches/itch-saver.js"></script>
+		<script src="themes/scratch/javascript/itches/itch-importexport.js"></script>
 		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />

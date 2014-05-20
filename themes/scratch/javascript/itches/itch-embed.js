@@ -1,6 +1,7 @@
 ;
 (function($) {
-
+	var loaded = false;
+	
 	var getEmbedlyId = function () {
 		var embedlyId = $('#EmbedlyId');
 		return embedlyId.val();
@@ -122,5 +123,9 @@
 	};
 	
 	Scratch.addWrapper('Embed', embedWrapper);
+	
+	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.embedly-3.1.1.min.js").done(function () {
+		loaded = true;
+	})
 	
 })(jQuery);
