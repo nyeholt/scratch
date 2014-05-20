@@ -132,7 +132,7 @@
 		});
 	};
 
-	$(document).on('prepareGeneralMenu', function (e, items) {
+	$(document).on('updateGeneralMenu', function (e, items) {
 		items[type] = { name: "Persister" };
 	});
 

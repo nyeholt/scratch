@@ -185,8 +185,8 @@
 		var newRelPos = [0, 0];
 		if (relativeElem) {
 
-			if (!relativeElem.attr) {
-				Scratch.log("relativeElem not a jquery object");
+			if (!relativeElem.attr || !relativeElem.attr('id')) {
+				Scratch.log("relativeElem not a jquery object, or has no ID ");
 				Scratch.log(relativeElem);
 				return null;
 			}
@@ -643,7 +643,7 @@
 			$(this).trigger('itchCreated');
 		})
 	}
-	
+
 	/**
 	 * Add a loading animation into an element
 	 * 
@@ -865,6 +865,10 @@
 			}
 		};
 
+		// Initialise and boot away
+		
+		// ugly hack for now...
+		Scratch.setStore(new LocalDataStore());
 		Scratch.init();
 
 		// aannndd some post init stuff that hasn't been cleaned up yet...
