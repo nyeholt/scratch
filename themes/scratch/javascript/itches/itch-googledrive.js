@@ -1,6 +1,6 @@
 ;
 (function($) {
-	var type = 'googeldrive';
+	var type = 'googledrive';
 	var typeClass = '.itch-type-' + type;
 	var SCOPES = [
 		'https://www.googleapis.com/auth/drive.file',
