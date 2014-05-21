@@ -10,6 +10,11 @@
 	var loaded = false;
 	var saving = false;
 	var CLIENT_ID = '648508991340-ombe7mil8679dbvl6udho62ofc2t2nt0.apps.googleusercontent.com';
+
+	var API_KEY = 'AIzaSyCtJdN4VSF1PnqJy3_ynLYEdTVTMpfNboQ';
+
+	var picker;
+
 	/**
 	 * gets the single instance itch that is doing anything
 	 * 
@@ -23,11 +28,19 @@
 		// check if markdown is loaded yet
 		var itchData = itch.data('itch');
 		var body = itch.find('.itch-body');
+		body.empty();
+
 		if (!loaded) {
 			body.html('Connecting to google drive...');
 			checkAuth();
 		} else {
-			body.html('<button id="save-to-drive">Save to drive</button>');
+			if (itchData.data.filename || itchData.data.fileId) {
+				body.append('Saving to ' + itchData.data.filename + ' (#' + itchData.data.fileId + ')');
+				body.append('<button class="save-to-drive">Save to Drive</button>');
+			}
+			if (picker) {
+				body.append('<button class="load-from-drive">Load from Drive</button>');
+			}
 		}
 
 		if (!updateTimer) {
@@ -39,7 +52,7 @@
 			{
 				name: 'filename',
 				type: 'text',
-				caption: 'File to store data into'
+				caption: 'Filename to save into'
 			},
 			{
 				name: 'fileId',
@@ -66,8 +79,8 @@
 			createTimer(itchData);
 		});
 	}
-	
-	Scratch.prepareItchType(type, { render: render, renderEdit: renderOptions });
+
+	Scratch.prepareItchType(type, {render: render, renderEdit: renderOptions});
 
 	var autoSave = function() {
 		var itch = activeItch();
@@ -78,16 +91,98 @@
 		}
 	}
 
+	/**
+	 * Load a json file from google drive
+	 * 
+	 * @returns 
+	 */
+	var loadFromDrive = function() {
+		var itch = activeItch();
+		if (!itch) {
+			return;
+		}
+
+		picker.setCallback(function(response) {
+			if (response.action == 'picked') {
+				if (response.docs && response.docs.length) {
+					for (var i in response.docs) {
+						var metadata = response.docs[i];
+
+						if (metadata.mimeType != 'application/json') {
+							continue;
+						}
+
+						loadFile(metadata);
+					}
+				}
+			}
+		});
+
+		picker.setVisible(true);
+	};
+
+	/**
+	 * 
+	 * @param {type} googleMetadata
+	 * @returns promise
+	 */
+	var loadFile = function(googleMetadata) {
+		var itch = activeItch();
+		if (!itch) {
+			return;
+		}
+		var itchData = itch.data('itch');
+
+		itchData.data.fileId = googleMetadata.id;
+		itchData.data.filename = googleMetadata.name;
+
+		var request = gapi.client.drive.files.get({
+			'fileId': googleMetadata.id
+		});
+
+		request.execute(function(resp) {
+			if (!resp.error) {
+				if (resp.downloadUrl) {
+					return $.ajax(
+						resp.downloadUrl,
+						{
+							headers: {'Authorization': 'Bearer ' + gapi.auth.getToken().access_token }
+						}
+					).then(function (data) {
+						$(document).trigger('loadItches', data);
+					});
+				}
+			} else if (resp.error.code == 401) {
+				// Access token might have expired.
+				checkAuth();
+			} else {
+				Scratch.log('An error occured: ' + resp.error.message);
+			}
+		});
+
+	};
+
+	/**
+	 * Given a data set of itches, load them one by one
+	 * 
+	 * @param object dataSet
+	 * @returns 
+	 * 
+	 */
+	var processScratchData = function(dataSet) {
+
+	}
+
 	var exportAndSave = function() {
 		var itch = activeItch();
 		var itchData = itch.data('itch');
 		var body = itch.find('.itch-body');
 		var filename = itchData.data.filename ? itchData.data.filename : 'scratch.json';
 		var fileId = itchData.data.fileId;
-		
+
 		var msg = $('<div class="gdrive-msg">').text('Saving to ' + filename);
 		body.append(msg);
-		
+
 		if (fileId) {
 			// we're updating an existing one
 			Scratch.log("Saving to " + fileId);
@@ -123,7 +218,7 @@
 			});
 		}
 	};
-	
+
 	var updateTimer = null;
 	var createTimer = function(itchData) {
 		if (!itchData) {
@@ -139,14 +234,16 @@
 		}
 	}
 
-	$(document).on('click', '#save-to-drive', function(e) {
+	$(document).on('click', '.save-to-drive', function(e) {
 		exportAndSave();
 	});
-	
+
+	$(document).on('click', '.load-from-drive', loadFromDrive);
+
 	$(document).on('updateGeneralMenu', function(e, items) {
 		items[type] = {name: "Google Drive"};
 	});
-	
+
 	window.googleClientLoad = function() {
 		checkAuth();
 	}
@@ -171,6 +268,16 @@
 					render(itch);
 				}
 			});
+
+			gapi.load('picker', {'callback': function() {
+					picker = new google.picker.PickerBuilder().
+						addView(google.picker.ViewId.DOCS).
+						setOAuthToken(authResult.access_token).
+						setDeveloperKey(API_KEY).
+						build();
+//				picker.setVisible(true);
+				}});
+
 		} else {
 			// No access token could be retrieved, force the authorization flow.
 			gapi.auth.authorize({

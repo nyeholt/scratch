@@ -34,11 +34,11 @@
 //				}
 //			})
 		} else {
-			renderOptions(itch);
+			renderEdit(itch);
 		}
 	};
 
-	var renderOptions = function(itch) {
+	var renderEdit = function(itch) {
 		var elems = [
 			{
 				type: 'url',
@@ -83,24 +83,8 @@
 	$(document).on('updateGeneralMenu', function(e, items) {
 		items[type] = {name: "Embed"};
 	});
-
-	$(document).on('itchCreated', typeClass, function() {
-		$(this).removeClass('initialising');
-		render($(this));
-	})
-
-	$(document).on('renderItch', typeClass, function() {
-		render($(this));
-	});
-
-	$(document).on('click', typeClass + ' .itch-handle', function() {
-		var itch = $(this).parents('.itch');
-		if (itch.find('.itchForm').length > 0) {
-			render(itch);
-		} else {
-			renderOptions(itch);
-		}
-	});
+	
+	Scratch.prepareItchType(type, {render: render, renderEdit: renderEdit});
 
 	/**
 	 * Class file for the wrapper around Embed itches

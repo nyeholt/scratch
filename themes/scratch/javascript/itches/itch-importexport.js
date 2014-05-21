@@ -52,16 +52,13 @@
 	};
 	
 	
-	var renderOptions = function (itch) {
-//		var elems = [
-//			
-//		];
-//		
-//		Scratch.editForm(itch, elems, null, function (event, itchData) {
-//			createTimer(itchData);
-//		});
+	var renderEdit = function (itch) {
+		var elems = [
+			
+		];
+		
+		Scratch.editForm(itch, elems);
 	};
-
 
 	$(document).on('click', '.save-button', function (e) {
 		var text = JSON.stringify(Scratch.forExport());
@@ -107,28 +104,16 @@
 		console.log("Load itch data");
 		console.log(itchData);
 	});
-
-	$(document).on('itchCreated', typeClass, function () {
-		$(this).removeClass('initialising');
-		if ($('.itch-type-Persister').length > 1) {
-			alert("Only the first created importer will actually function!");
-		}
-
-		render($(this));
-	})
 	
-	$(document).on('renderItch', typeClass, function () {
-		render($(this));
-	});
-
-	$(document).on('click', typeClass + ' .itch-handle', function () {
-		var itch = $(this).parents('.itch');
-		if (itch.find('.itchForm').length > 0) {
-			render(itch);
-		} else {
-			renderOptions(itch);
+	$(document).on('loadItches', function (e, itches) {
+		if (itches && itches.itches) {
+			for (var guid in itches.itches) {
+				restoreItch(itches.itches[guid]);
+			}
 		}
 	});
+
+	Scratch.prepareItchType(type, {render: render, renderEdit: renderEdit});
 	
 	/**
 	 * on addition to the page, make sure to load the itches up

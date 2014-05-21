@@ -545,6 +545,9 @@
 		var typeClass = '.itch-type-' + type;
 		$(document).on('itchCreated', typeClass, function () {
 			$(this).removeClass('initialising');
+			if (handlers.onCreate) {
+				handlers.onCreate($(this));
+			}
 			handlers.renderEdit($(this));
 		});
 		
@@ -689,7 +692,7 @@
 	 */
 	Scratch.typeLoaded = function (type) {
 		$('.itch-type-' + type + '.initialising').each (function () {
-			$(this).trigger('itchCreated');
+			$(this).trigger('itchRestored');
 		})
 	}
 
