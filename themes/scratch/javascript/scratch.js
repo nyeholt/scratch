@@ -61,7 +61,7 @@
 		}
 		
 		if (!this.state.scratchId) {
-			this.updateState('scratchId', Scratch.GUID());
+			this.state.scratchId = Scratch.GUID();
 		}
 
 		var itches = scratchStore.get('itches');

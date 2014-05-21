@@ -27,12 +27,6 @@
 		
 		<script src="themes/scratch/javascript/itches/itch-text.js"></script>
 		
-<!--		<script src="themes/scratch/javascript/itches/itch-embed.js"></script>-->
-		
-<!--		<script src="themes/scratch/javascript/itches/itch-rss.js"></script>-->
-<!--		<script src="themes/scratch/javascript/itches/itch-saver.js"></script>
-		<script src="themes/scratch/javascript/itches/itch-importexport.js"></script>-->
-		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-context/jquery.contextMenu.css" />
@@ -56,23 +50,5 @@
 		</div>
 		</div>
 		
-		<script type="text/template" id="GeneralSettingsForm">
-		<form class="generalSettingsForm itchForm">
-			<div>
-			<label>Title</label>
-			<input type="text" name="title" />
-			</div>
-			<div>
-			<label>Background</label>
-			<input type="text" name="backgroundColor" />
-			</div>
-			<div>
-			<label>Labels</label>
-			<input type="text" name="labels" />
-			</div>
-			
-			<input type="submit" value="OK" />
-		</form>
-		</script>
 	</body>
 </html>
