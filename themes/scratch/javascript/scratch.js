@@ -373,9 +373,9 @@
 			}
 		});
 
-		var doSave = false;
+		var createNew = false;
 		if (!existingData) {
-			doSave = true;
+			createNew = true;
 			var itchId = this.nextItchId();
 			existingData = {
 				id: itchId,
@@ -402,17 +402,18 @@
 		itch.data('itch', existingData);
 		itch.attr('data-id', existingData.guid);
 
-		if (doSave) {
-			this.save();
-		}
 		
 		if (existingData.options.title) {
 			itch.attr('title', existingData.options.title);
 			itch.find('.itch-handle').text(existingData.options.title);
 		}
 
-		$(itch).trigger('itchCreated');
-		$(itch).trigger('renderItch');
+		if (createNew) {
+			$(itch).trigger('itchCreated');
+			this.save();
+		} else {
+			$(itch).trigger('itchRestored');
+		}
 
 		return itch;
 	};
@@ -468,7 +469,7 @@
 		var top = parseInt(itch.parent().css('top'));
 		var left = parseInt(itch.parent().css('left'));
 
-		zoomer.panzoom('pan', -1 * (left), -1 * (top + 200));
+		itch.trigger('requestFocus');
 	}
 	
 	Scratch.pan = function (x, y) {
@@ -532,6 +533,40 @@
 				$(this).trigger('renderItch');
 			}
 		})
+	};
+	
+	/**
+	 * Provides skeleton functionality for 
+	 * 
+	 * @param {type} type
+	 * @returns {undefined}
+	 */
+	Scratch.prepareItchType = function (type, handlers) {
+		var typeClass = '.itch-type-' + type;
+		$(document).on('itchCreated', typeClass, function () {
+			$(this).removeClass('initialising');
+			handlers.renderEdit($(this));
+		});
+		
+		$(document).on('itchRestored', typeClass, function () {
+			$(this).removeClass('initialising');
+			handlers.render($(this));
+		});
+
+		$(document).on('renderItch', typeClass, function () {
+			handlers.render($(this));
+		});
+
+		$(document).on('click', typeClass + ' .itch-handle', function () {
+			var itch = $(this).parents('.itch');
+			if (itch.find('.itchForm').length > 0) {
+				handlers.render(itch);
+			} else {
+				handlers.renderEdit(itch);
+			}
+		});
+
+
 	};
 
 	
@@ -738,7 +773,16 @@
 
 			Scratch.updateState('current_transform', Scratch.currentTransform());
 		});
-
+		
+		$(document).on('requestFocus', function (event) {
+//			
+//			zoomer.panzoom('zoom', 1, {
+//				increment: 0.1,
+//				animate: true,
+//				focal: event
+//			});
+		});
+		
 		$(zoomer).on('touchstart mouseover', '.itch', function() {
 			zoomer.panzoom('disable');
 		});
@@ -865,7 +909,7 @@
 					}, 'options');
 				}
 			},
-			
+
 			"delete": {
 				name: "Delete",
 				execute: function(o) {

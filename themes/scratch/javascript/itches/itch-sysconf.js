@@ -78,6 +78,11 @@
 		$(this).removeClass('initialising');
 		renderOptions($(this));
 	})
+
+	$(document).on('itchRestored', typeClass, function () {
+		$(this).removeClass('initialising');
+		render($(this));
+	})
 	
 	$(document).on('renderItch', typeClass, function () {
 		render($(this));

@@ -141,10 +141,17 @@
 	$(document).on('click', '#save-to-drive', function(e) {
 		exportAndSave();
 	});
+	
 	$(document).on('updateGeneralMenu', function(e, items) {
 		items[type] = {name: "Google Drive"};
 	});
+	
 	$(document).on('itchCreated', typeClass, function() {
+		$(this).removeClass('initialising');
+		render($(this));
+	})
+
+	$(document).on('itchRestored', typeClass, function () {
 		$(this).removeClass('initialising');
 		render($(this));
 	})
@@ -152,6 +159,7 @@
 	$(document).on('renderItch', typeClass, function() {
 		render($(this));
 	});
+
 	$(document).on('click', typeClass + ' .itch-handle', function() {
 		var itch = $(this).parents('.itch');
 		if (itch.find('.itchForm').length > 0) {
