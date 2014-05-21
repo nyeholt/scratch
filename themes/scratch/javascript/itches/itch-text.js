@@ -14,7 +14,7 @@
 			} else if (!loaded) {
 				Scratch.loading(itch.find('.itch-body'));
 				setTimeout(function () {
-					render(itch);
+					handlers.render(itch);
 				}, 1000);
 			}
 		},

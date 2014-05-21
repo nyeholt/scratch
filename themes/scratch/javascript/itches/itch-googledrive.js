@@ -18,6 +18,7 @@
 	var activeItch = function() {
 		return $(typeClass).first();
 	};
+
 	var render = function(itch) {
 		// check if markdown is loaded yet
 		var itchData = itch.data('itch');
@@ -65,6 +66,8 @@
 			createTimer(itchData);
 		});
 	}
+	
+	Scratch.prepareItchType(type, { render: render, renderEdit: renderOptions });
 
 	var autoSave = function() {
 		var itch = activeItch();
@@ -121,8 +124,6 @@
 		}
 	};
 	
-	
-	
 	var updateTimer = null;
 	var createTimer = function(itchData) {
 		if (!itchData) {
@@ -146,28 +147,6 @@
 		items[type] = {name: "Google Drive"};
 	});
 	
-	$(document).on('itchCreated', typeClass, function() {
-		$(this).removeClass('initialising');
-		render($(this));
-	})
-
-	$(document).on('itchRestored', typeClass, function () {
-		$(this).removeClass('initialising');
-		render($(this));
-	})
-
-	$(document).on('renderItch', typeClass, function() {
-		render($(this));
-	});
-
-	$(document).on('click', typeClass + ' .itch-handle', function() {
-		var itch = $(this).parents('.itch');
-		if (itch.find('.itchForm').length > 0) {
-			render(itch);
-		} else {
-			renderOptions(itch);
-		}
-	});
 	window.googleClientLoad = function() {
 		checkAuth();
 	}
