@@ -27,6 +27,8 @@
 		
 		<script src="themes/scratch/javascript/itches/itch-text.js"></script>
 		
+		<!--<script src="themes/scratch/javascript/itches/itch-embed.js"></script>-->
+		
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="themes/scratch/css/scratch.css" />
 		<link rel="stylesheet" href="themes/scratch/javascript/jquery-context/jquery.contextMenu.css" />

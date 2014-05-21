@@ -20,13 +20,18 @@
 			
 			if (info.media.html) {
 				body.html(itchData.data.embedInfo.media.html);
+			} else if (info.media.url && info.media.type == 'photo') {
+				var caption = info.description ? info.description : info.title;
+				if (!caption) {
+					caption = info.original_url;
+				}
+				body.append('<div><a href="' + info.original_url +'" target="_blank"><img src="' + info.media.url + '" title="' + caption + '" /></a></div>')
 			} else if (info.content) {
 				body.html(info.content)
-			} else if (info.images) {
-				$(info.images).each(function () {
-					body.append('<div><a href="' + this.url +'" target="_blank"><img src="' + this.url + '" title="' + this.caption + '" /></a><p>'+ this.caption + '</p></div>')
-				})
-			} 
+			} else {
+				var linkText = info.title + ': ' + info.description;
+				body.append('<div><a href="' + info.url +'" target="_blank">' + linkText + '</a></div>')
+			}
 
 //			$.get('jsonservice/socialGraph/convertUrl', {remoteUrl: itchData.data.url}, function (data) {
 //				if (data && data.response && data.response.Content) {

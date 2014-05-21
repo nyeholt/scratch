@@ -33,11 +33,22 @@
 		Scratch.loading(body);
 		parserss(itchData.data.url,body);
 	};
-	
 
-	var renderOptions = function(itch) {
+	var renderEdit = function(itch) {
+		var elems = [
+			{
+				type: 'url',
+				caption: ' URL',
+				name: 'url'
+			},
+			{
+				type: 'submit',
+				value: 'Update'
+			}
+		];
+		
 		// re-use the embed editting form
-		Scratch.editForm(itch, '#EmbedEditForm');
+		Scratch.editForm(itch, elems);
 	};
 
 	
@@ -45,23 +56,7 @@
 		items[type] = { name: "RSS" };
 	});
 
-	$(document).on('itchCreated', typeClass, function() {
-		$(this).removeClass('initialising');
-		renderOptions($(this));
-	})
-
-	$(document).on('renderItch', typeClass, function() {
-		render($(this));
-	});
-
-	$(document).on('click', typeClass + ' .itch-handle', function() {
-		var itch = $(this).parents('.itch');
-		if (itch.find('.itchForm').length > 0) {
-			render(itch);
-		} else {
-			renderOptions(itch);
-		}
-	});
+	Scratch.prepareItchType(type, {render: render, renderEdit: renderEdit});
 
 	/**
 	 * on addition to the page, make sure to load the itches up
