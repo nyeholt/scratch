@@ -80,8 +80,6 @@
 		});
 	}
 
-	Scratch.prepareItchType(type, {render: render, renderEdit: renderOptions});
-
 	var autoSave = function() {
 		var itch = activeItch();
 		// only do auto saving _if_ the saving flag has been set true
@@ -133,8 +131,10 @@
 		}
 		var itchData = itch.data('itch');
 
-		itchData.data.fileId = googleMetadata.id;
-		itchData.data.filename = googleMetadata.name;
+		itchData.data.loadedFileId = googleMetadata.id;
+		itchData.data.loadedFilename = googleMetadata.name;
+
+		Scratch.save();
 
 		var request = gapi.client.drive.files.get({
 			'fileId': googleMetadata.id
@@ -328,10 +328,8 @@
 	Scratch.loadScript("https://apis.google.com/js/client.js?onload=googleClientLoad").done(function() {
 
 	});
-	/**
-	 * on addition to the page, make sure to load the itches up
-	 */
-	$(function() {
-		Scratch.typeLoaded(type);
-	});
+	
+	
+	Scratch.prepareItchType(type, {render: render, renderEdit: renderOptions});
+	
 })(jQuery);

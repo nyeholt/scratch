@@ -115,10 +115,4 @@
 
 	Scratch.prepareItchType(type, {render: render, renderEdit: renderEdit});
 	
-	/**
-	 * on addition to the page, make sure to load the itches up
-	 */
-	$(function () {
-		Scratch.typeLoaded(type);
-	});
 })(jQuery);

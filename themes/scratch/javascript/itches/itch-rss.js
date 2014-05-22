@@ -58,13 +58,6 @@
 
 	Scratch.prepareItchType(type, {render: render, renderEdit: renderEdit});
 
-	/**
-	 * on addition to the page, make sure to load the itches up
-	 */
-	$(function () {
-		Scratch.typeLoaded(type);
-	});
-
 	// reload all itches every 10 minutes
 	setInterval(function () {
 		$(typeClass).each(function () {

@@ -110,8 +110,4 @@
 		loaded = true;
 	});
 	
-	$(function () {
-		Scratch.typeLoaded(type);
-	});
-	
 })(jQuery);

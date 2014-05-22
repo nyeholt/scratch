@@ -37,7 +37,8 @@
 		// what is our current itch ID?
 		state: {
 			itchId: 0
-		}
+		},
+		loaded: false
 	};
 
 	Scratch.setStore = function(store) {
@@ -86,6 +87,8 @@
 		if (this.state.current_transform) {
 			zoomer.panzoom('setMatrix', this.state.current_transform);
 		}
+		
+		this.loaded = true;
 	};
 
 	Scratch.save = function() {
@@ -569,7 +572,9 @@
 			}
 		});
 
-
+		if (this.loaded) {
+			this.typeLoaded(type);
+		}
 	};
 
 	
@@ -721,10 +726,20 @@
 
 
 	$(document).on('renderItch itchRestored', '.itch', function() {
+		var itch = $(this);
 		var data = $(this).data('itch');
-		if (data.options.backgroundColor) {
-			$(this).css('background-color', data.options.backgroundColor);
+		
+		if (data.options.labels && data.options.labels.length) {
+			var allLabels = data.options.labels.split(',');
+			$(allLabels).each(function () {
+				itch.addClass('label-' + $.trim(this));
+			})
 		}
+
+//		if (data.options.backgroundColor) {
+//			$(this).css('color', data.options.fontColor);
+//			$(this).css('background-color', data.options.backgroundColor);
+//		}
 	});
 
 
@@ -891,11 +906,16 @@
 							"caption" : "Title",
 							"type" : "text"
 						},
-						{
-							"name" : "backgroundColor",
-							"caption" : "Background Colour",
-							"type" : "color"
-						},
+//						{
+//							"name" : "fontColor",
+//							"caption" : "Font Colour",
+//							"type" : "color"
+//						},
+//						{
+//							"name" : "backgroundColor",
+//							"caption" : "Background Colour",
+//							"type" : "color"
+//						},
 						{
 							"name" : "labels",
 							"caption" : "Labels (comma separated)",

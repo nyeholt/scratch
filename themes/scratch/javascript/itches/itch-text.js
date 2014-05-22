@@ -8,14 +8,16 @@
 		render: function (itch) {
 			// check if markdown is loaded yet
 			var info = itch.data('itch');
-			if (info.data && info.data.content && loaded) {
+			if (info.data && info.data.content && typeof markdown != 'undefined') {
 				var src = markdown.toHTML(info.data.content);
 				itch.find('.itch-body').html(src);
-			} else if (!loaded) {
+			} else if (typeof markdown == 'undefined') {
 				Scratch.loading(itch.find('.itch-body'));
 				setTimeout(function () {
 					handlers.render(itch);
 				}, 1000);
+			} else {
+				itch.find('.itch-body').empty();
 			}
 		},
 		renderEdit: function (itch) {
