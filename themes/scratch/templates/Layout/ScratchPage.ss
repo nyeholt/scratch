@@ -38,11 +38,11 @@
 			<div id="zoomcontrols">
 			<button id="zoomout" value="-">-</button><button id="resetzoom">0</button><button id="zoomin" value="+">+</button>
 			</div>
-			<div id="controls-body">
+			
+			<div id="pinned-itches">
 				
 			</div>
 			
-			<button id="collapsecontrols">Close</button>
 		</div>
 		
 		

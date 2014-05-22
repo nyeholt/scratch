@@ -38,6 +38,20 @@ Overrides
 	margin: 0px auto;
 }
 
+#pinned-itches {
+	margin-top: 30px;
+	width: 300px;
+	min-height: 20px;
+}
+
+#pinned-itches .itch {
+	margin-bottom: 10px;
+}
+
+#pinned-itches .itch-handle, #pinned-itches .itch-options {
+	position: static;
+}
+
 #container {
 	position: absolute;
 	top: 0px;

@@ -87,7 +87,7 @@
 		if (this.state.current_transform) {
 			zoomer.panzoom('setMatrix', this.state.current_transform);
 		}
-		
+
 		this.loaded = true;
 	};
 
@@ -231,8 +231,6 @@
 			return;
 		}
 
-
-
 		var newTile = $('<div>').addClass(TILE_CLASS).attr('id', key).css(newTilePos).appendTo(CONTAINER);
 
 		newTile.droppable({
@@ -240,6 +238,9 @@
 				var droppedOn = $(this);
 				var dropped = $(ui.draggable);
 
+				// make sure it's absolute again if coming off the pinned list
+				dropped.css('position', 'absolute');
+				
 				var currentParent = $(dropped.parent());
 
 				if (currentParent[0] !== this) {
@@ -274,6 +275,7 @@
 				var itch = dropped.data('itch');
 				itch.position = [parseInt(dropped.css('top')), parseInt(dropped.css('left'))];
 				itch.tile = droppedOn.attr('id');
+				itch.options.pinned = false;
 
 				Scratch.save();
 
@@ -349,7 +351,7 @@
 			})
 			.addClass('itch-type-' + type).addClass('initialising');
 
-		itch.appendTo(to);
+		
 		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
 
 		// bind events
@@ -375,6 +377,8 @@
 				Scratch.save();
 			}
 		});
+
+		itch.appendTo(to);
 
 		var createNew = false;
 		if (!existingData) {
@@ -417,6 +421,11 @@
 		} else {
 			$(itch).trigger('itchRestored');
 		}
+		
+		// now if it was pinned...
+		if (existingData.options.pinned) {
+			this.pinItch(itch);
+		}
 
 		return itch;
 	};
@@ -439,6 +448,17 @@
 		}
 	};
 	
+	Scratch.pinItch = function (itch) {
+		itch.css({
+			'position': 'static',
+			'width': 'auto'
+		});
+		$('#pinned-itches').append(itch);
+		
+		itch.data('itch').options.pinned = true;
+
+		Scratch.save();
+	};
 
 	Scratch.nextItchId = function() {
 		return ++this.state.itchId;
@@ -887,7 +907,8 @@
 				position: offsetPos
 			};
 		});
-
+		
+		/** MENU GENERATION STUFF */
 		var defaultGeneralMenu = {
 			"itch": {
 				name: 'Itch'
@@ -930,6 +951,13 @@
 					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, null, function (form, data) {
 						itch.trigger('optionsUpdate');
 					}, 'options');
+				}
+			},
+			
+			'pin': {
+				name: "Pin",
+				execute: function (o) {
+					Scratch.pinItch($(this));
 				}
 			},
 
