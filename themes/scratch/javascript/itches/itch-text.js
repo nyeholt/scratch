@@ -1,8 +1,5 @@
 ;(function ($) {
 	var type = 'itch';
-	var typeClass = '.itch-type-' + type;
-	
-	var loaded = false;
 	
 	var handlers = {
 		render: function (itch) {
@@ -33,13 +30,18 @@
 					value: 'Update'
 				}
 			];
-			Scratch.editForm(itch, elems);
+			Scratch.editForm(itch, elems, function () {
+				itch.find('textarea').autogrow();
+			});
 		}
 	};
 
 	Scratch.prepareItchType('itch', handlers);
 
-	Scratch.loadScript("themes/scratch/javascript/markdown-0.6.1/markdown.js").done(function () {
-		loaded = true;
+	Scratch.loadScript("themes/scratch/javascript/markdown-0.6.1/markdown.js");
+	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.autogrow-textarea.js").done(function () {
+		
 	});
+	
+	
 })(jQuery);

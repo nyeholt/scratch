@@ -352,7 +352,9 @@
 			.addClass('itch-type-' + type).addClass('initialising');
 
 		
-		itch.append('<div class="itch-handle"></div>').append('<div class="itch-options">...</div>').append('<div class="itch-body"></div>');
+		itch.append('<div class="itch-handle"></div>')
+			.append('<div class="itch-options">...</div>')
+			.append('<div class="itch-body-wrap"><div class="itch-body"></div></div>');
 
 		// bind events
 		itch.draggable({
@@ -551,10 +553,11 @@
 	 * @returns null
 	 */
 	Scratch.closeItches = function() {
-		$('.itch').each(function() {
+		$('.selected-itch').each(function() {
 			if ($(this).find('.itchForm').is(':visible')) {
 				$(this).trigger('renderItch');
 			}
+			$(this).removeClass('selected-itch');
 		})
 	};
 	
@@ -853,6 +856,11 @@
 		$(document).on('click', '.itch', function(e) {
 			$('.topitch').removeClass('topitch');
 			$(this).addClass('topitch');
+			
+			if (!e.ctrlKey) {
+				$('.selected-itch').removeClass('selected-itch');
+			}
+			$(this).addClass('selected-itch');
 		});
 		
 		$(document).on('optionsUpdate', '.itch', function () {
