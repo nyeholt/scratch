@@ -2,4 +2,31 @@
 .itch-type-googledrive {
 	background: #fff url(images/drive.png) no-repeat top right;
 	background-size: 32px 32px;
+	
 }
+
+.itch-type-googledrive .itch-handle {
+	background-color: #4184F8;
+}
+
+.itch-type-embed .itch-handle {
+	background-color: #E60003;
+	color: #fff;
+}
+
+.itch-type-itch .itch-handle {
+	background-color: #F4AA8D;
+}
+
+
+.itch-type-systemconfig .itch-handle {
+	background-color: #011C53;
+	color: #fff;
+}
+
+.itch-type-rss .itch-handle {
+	background-color: #E2583E;
+	color: #fff;
+}
+	
+	

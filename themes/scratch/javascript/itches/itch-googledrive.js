@@ -295,7 +295,7 @@
 
 		var contentType = fileMetadata.type || 'application/json';
 		// Updating the metadata is optional and you can instead use the value from drive.files.get.
-		var base64Data = btoa(fileContent);
+		var base64Data = Base64.encode(fileContent);
 		var multipartRequestBody =
 			delimiter +
 			'Content-Type: application/json\r\n\r\n' +

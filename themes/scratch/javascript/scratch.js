@@ -720,7 +720,7 @@
 	}
 
 
-	$(document).on('renderItch', '.itch', function() {
+	$(document).on('renderItch itchRestored', '.itch', function() {
 		var data = $(this).data('itch');
 		if (data.options.backgroundColor) {
 			$(this).css('background-color', data.options.backgroundColor);
