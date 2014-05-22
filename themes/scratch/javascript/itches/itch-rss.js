@@ -8,6 +8,17 @@
 			url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
 			dataType: 'json',
 			success: function(data) {
+				if (!data) {
+					alert("RSS data not found for " + url);
+					return;
+				}
+				
+				if (!data.responseData) {
+					Scratch.log(data);
+					alert("RSS data not found for " + url);
+					return;
+				}
+				
 				//console.log(data.responseData.feed);
 				$(container).html('<h2>' + (data.responseData.feed.title) + '</h2>');
 
@@ -30,8 +41,12 @@
 	var render = function(itch) {
 		var itchData = itch.data('itch');
 		var body = itch.find('.itch-body');
-		Scratch.loading(body);
-		parserss(itchData.data.url,body);
+		if (itchData.data.url) {
+			Scratch.loading(body);
+			parserss(itchData.data.url,body);
+		} else {
+			body.html('Please insert  URL');
+		}
 	};
 
 	var renderEdit = function(itch) {
