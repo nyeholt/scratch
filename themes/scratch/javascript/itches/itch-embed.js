@@ -66,24 +66,30 @@
 		})
 		
 		Scratch.editForm(itch, elems, null, function(form, itchData) {
-			// after editing, we reset the embedContent
-			delete itchData.data.embedInfo;
-			
-			var embedlyId = itchData.data.embedly ? itchData.data.embedly : Scratch.EmbedlyID;
-
-			if (itchData.data.url && embedlyId) {
-				Scratch.loading(itch.find('.itch-body'));
-				$.embedly.extract(itchData.data.url, {key: embedlyId}).progress(function(data) {
-					itchData.data.embedInfo = data;
-					itchData.options.title = data.title;
-					Scratch.save();
-					itch.trigger('optionsUpdate');
-					render(itch);
-				});
-			}
+			itch.trigger('reloadEmbedData');
 			return false;
 		});
 	};
+	
+	$(document).on('reloadEmbedData', '.itch', function (e) {
+		var itch = $(this);
+		var itchData = itch.data('itch');
+		
+		delete itchData.data.embedInfo;
+		
+		var embedlyId = itchData.data.embedly ? itchData.data.embedly : Scratch.EmbedlyID;
+
+		if (itchData.data.url && embedlyId) {
+			Scratch.loading(itch.find('.itch-body'));
+			$.embedly.extract(itchData.data.url, {key: embedlyId}).progress(function(data) {
+				itchData.data.embedInfo = data;
+				itchData.options.title = data.title;
+				Scratch.save();
+				itch.trigger('optionsUpdate');
+				render(itch);
+			});
+		}
+	})
 
 	$(document).on('updateGeneralMenu', function(e, items) {
 		items[type] = {name: "Embed"};

@@ -39,9 +39,8 @@
 	Scratch.prepareItchType('itch', handlers);
 
 	Scratch.loadScript("themes/scratch/javascript/markdown-0.6.1/markdown.js");
-	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.autogrow-textarea.js").done(function () {
-		
-	});
+	
+	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.autogrow-textarea.js").done(function () {});
 	
 	
 })(jQuery);

@@ -124,6 +124,16 @@
 	};
 	
 	/**
+	 * Get the state of things for a particular value
+	 * 
+	 * @param string option
+	 * @returns mixed
+	 */
+	Scratch.getState = function (option) {
+		return this.state[option];
+	}
+
+	/**
 	 * Addons should register the type they expose
 	 * 
 	 * @param object typeInfo
@@ -394,7 +404,7 @@
 				type: type,
 				size: size,
 				options: {
-					title: 'New ' + type + ' itch (#' + itchId +')'
+					title: 'New ' + type + ' itch'
 				},
 				data: {}
 			};
@@ -597,7 +607,6 @@
 				width: itchData.size[0],
 				height: itchData.size[1]
 			});
-			
 			handlers.render($(this));
 		});
 
