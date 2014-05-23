@@ -44,16 +44,31 @@ Overrides
 	min-height: 20px;
 	max-height: 400px;
 	overflow: auto;
+	position: relative;
+}
+
+#pinned-itches .ui-resizable-handle {
+	display: none !important;
 }
 
 #pinned-itches .itch {
 	margin-bottom: 10px;
 	height: 20px;
+	box-shadow: none;
+	border: 1px solid #000;
 }
 
-#pinned-itches .itch-handle, #pinned-itches .itch-options {
+#pinned-itches .itch-handle,#pinned-itches .itch-options {
 	position: static;
 }
+
+#pinned-itches .itch-options {
+	float: left;
+	margin-top: -18px;
+}
+/*#pinned-itches .itch-options {
+	display: none;
+}*/
 
 #container {
 	position: absolute;
@@ -154,4 +169,16 @@ Overrides
 
 .itchForm {
 	overflow: auto;
+}
+
+.itch .ui-dform-label {
+	padding: 3px 0px;
+}
+
+.itch .ui-dform-div {
+	margin-bottom: 5px;
+}
+
+.bottomgap {
+	margin: 10px;
 }

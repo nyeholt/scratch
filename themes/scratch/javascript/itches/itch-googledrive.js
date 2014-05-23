@@ -10,7 +10,6 @@
 	var loaded = false;
 	var saving = false;
 	var CLIENT_ID = '648508991340-ombe7mil8679dbvl6udho62ofc2t2nt0.apps.googleusercontent.com';
-
 	var API_KEY = 'AIzaSyCtJdN4VSF1PnqJy3_ynLYEdTVTMpfNboQ';
 
 	var picker;
@@ -57,7 +56,7 @@
 			{
 				name: 'fileId',
 				type: 'text',
-				caption: 'Drive file ID - will be auto-populated after save, or manually set to the file ID to read. '
+				caption: 'Drive file ID - will be auto-populated after hitting save, or you can manually set to the file ID to read. '
 			},
 			{
 				'name': 'saveFrequency',
@@ -80,6 +79,9 @@
 		});
 	}
 
+/** 
+ * Auto save is currently disabled...
+ */
 	var autoSave = function() {
 		var itch = activeItch();
 		// only do auto saving _if_ the saving flag has been set true

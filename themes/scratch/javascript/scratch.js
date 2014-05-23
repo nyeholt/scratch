@@ -273,6 +273,7 @@
 				}
 
 				var itch = dropped.data('itch');
+				dropped.css('height', itch.size[1]);
 				itch.position = [parseInt(dropped.css('top')), parseInt(dropped.css('left'))];
 				itch.tile = droppedOn.attr('id');
 				itch.options.pinned = false;
@@ -385,9 +386,9 @@
 		var createNew = false;
 		if (!existingData) {
 			createNew = true;
-			var itchId = this.nextItchId();
+			
 			existingData = {
-				id: itchId,
+				
 				tile: $(to).attr('id'),
 				position: pos,
 				type: type,
@@ -397,6 +398,10 @@
 				},
 				data: {}
 			};
+		}
+		
+		if (!existingData.id) {
+			existingData.id = this.nextItchId();
 		}
 		
 		if (!existingData.guid) {
@@ -453,7 +458,8 @@
 	Scratch.pinItch = function (itch) {
 		itch.css({
 			'position': 'static',
-			'width': 'auto'
+			'width': 'auto',
+			'height': '20px'
 		});
 		$('#pinned-itches').append(itch);
 		
@@ -583,6 +589,15 @@
 		});
 
 		$(document).on('renderItch', typeClass, function () {
+			// ensure position is correct
+			var itchData = $(this).data('itch');
+			$(this).css({
+				top: itchData.position[0],
+				left: itchData.position[1],
+				width: itchData.size[0],
+				height: itchData.size[1]
+			});
+			
 			handlers.render($(this));
 		});
 

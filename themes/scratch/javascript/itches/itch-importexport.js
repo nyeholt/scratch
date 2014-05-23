@@ -10,12 +10,17 @@
 	 */
 	var restoreItch = function (restoredObject) {
 		if (restoredObject.guid) {
+			if (restoredObject.id) {
+				delete restoredObject.id;
+			}
+
 			var existing = Scratch.getItch(restoredObject.guid);
 			if (existing) {
 				// don't change its position
 				delete restoredObject.position;
 				$.extend(existing, restoredObject);
 				var itch = Scratch.$getItch(restoredObject.guid);
+				itch.trigger('optionsUpdate');
 				itch.trigger('renderItch');
 			} else {
 				Scratch.addItch(restoredObject);
@@ -49,8 +54,10 @@
 			}
 			]
 		});
+		
+		body.find('save-button').click(exportItchData);
+		body.find('load-button').click(loadItchData);
 	};
-	
 	
 	var renderEdit = function (itch) {
 		var elems = [
@@ -60,21 +67,21 @@
 		Scratch.editForm(itch, elems);
 	};
 
-	$(document).on('click', '.save-button', function (e) {
+	var exportItchData = function () {
 		var text = JSON.stringify(Scratch.forExport());
 		text = Base64.encode(text);
 		var pom = $('<a>');
 		var url = 'data:application/json;charset=utf-8;base64,' + (text) + '';
 		window.open(url);
-	});
+	};
 
-	$(document).on('click', '.load-button', function (e) {
+	var loadItchData = function (e) {
 		var data = $(this).siblings('textarea').val();
 		if (data) {
 			var restored = JSON.parse(Base64.decode(data));
 			restoreItch(restored);
 		}
-	});
+	};
 	
 
 	$(document).on('updateGeneralMenu', function (e, items) {
@@ -101,8 +108,7 @@
 	});
 	
 	$(document).on('loadItch', function (e, itchData) {
-		console.log("Load itch data");
-		console.log(itchData);
+		restoreItch(itchData);
 	});
 	
 	$(document).on('loadItches', function (e, itches) {
