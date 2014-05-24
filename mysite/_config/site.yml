@@ -1,7 +1,0 @@
----
-Name: site_config
----
-SSViewer:
-  theme: scratch
-MySQLDatabase:
-  connection_charset: utf8

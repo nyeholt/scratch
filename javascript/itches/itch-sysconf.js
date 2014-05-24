@@ -97,6 +97,6 @@
 		}
 	});
 
-	Scratch.loadScript('themes/scratch/javascript/spectrum/spectrum.js');
-	Scratch.loadCss('themes/scratch/javascript/spectrum/spectrum.css');
+	Scratch.loadScript('javascript/spectrum/spectrum.js');
+	Scratch.loadCss('javascript/spectrum/spectrum.css');
 })(jQuery);

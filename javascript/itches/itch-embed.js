@@ -112,7 +112,7 @@
 	
 	Scratch.addWrapper(type, embedWrapper);
 	
-	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.embedly-3.1.1.min.js").done(function () {
+	Scratch.loadScript("javascript/jquery/jquery.embedly-3.1.1.min.js").done(function () {
 		loaded = true;
 	});
 	

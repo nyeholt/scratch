@@ -754,7 +754,7 @@
 	 * @returns {undefined}
 	 */
 	Scratch.loading = function(elem) {
-		elem.html('<div class="ajax-loader"><img src="themes/scratch/images/712.png" /></div>');
+		elem.html('<div class="ajax-loader"><img src="images/712.png" /></div>');
 	}
 
 	var S4 = function() {

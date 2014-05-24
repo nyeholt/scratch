@@ -50,7 +50,7 @@
 						exportSet[selectedData.guid] = selectedData;
 					});
 					
-					$.post('themes/scratch/javascript/itches/dpaste.php', {'action': 'create', content: JSON.stringify(exportSet)}).error(function (response) {
+					$.post('javascript/itches/dpaste.php', {'action': 'create', content: JSON.stringify(exportSet)}).error(function (response) {
 						alert("Something went wrong");
 					}).done(function (data) {
 						if (data.headers.Location) {
@@ -65,7 +65,7 @@
 			body.find('.load-button').click(function (e) {
 				var toLoad = body.find('[name=loadUrl]').val();
 				
-				$.get('themes/scratch/javascript/itches/dpaste.php', {action: 'load', paste: toLoad}, function (data) {
+				$.get('javascript/itches/dpaste.php', {action: 'load', paste: toLoad}, function (data) {
 					if (data && data.body) {
 						for (var guid in data.body) {
 							var loadedData = data.body[guid];

@@ -38,11 +38,11 @@
 
 	Scratch.prepareItchType('itch', handlers);
 
-	Scratch.loadScript("themes/scratch/javascript/markdown-0.6.1/markdown.js");
+	Scratch.loadScript("javascript/markdown-0.6.1/markdown.js");
 	
-	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.autogrow-textarea.js").done(function () {});
+	Scratch.loadScript("javascript/jquery/jquery.autogrow-textarea.js").done(function () {});
 	
-	Scratch.loadCss('themes/scratch/javascript/jquery/prism.css');
-	Scratch.loadScript('themes/scratch/javascript/jquery/prism.js');
+	Scratch.loadCss('javascript/jquery/prism.css');
+	Scratch.loadScript('javascript/jquery/prism.js');
 	
 })(jQuery);
