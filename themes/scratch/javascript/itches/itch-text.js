@@ -42,5 +42,7 @@
 	
 	Scratch.loadScript("themes/scratch/javascript/jquery/jquery.autogrow-textarea.js").done(function () {});
 	
+	Scratch.loadCss('themes/scratch/javascript/jquery/prism.css');
+	Scratch.loadScript('themes/scratch/javascript/jquery/prism.js');
 	
 })(jQuery);

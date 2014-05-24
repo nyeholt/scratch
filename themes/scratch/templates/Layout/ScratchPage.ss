@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<% base_tag %>
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
 		<title>Scratch</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<script type="text/javascript" src="themes/scratch/javascript/base64.js"></script>

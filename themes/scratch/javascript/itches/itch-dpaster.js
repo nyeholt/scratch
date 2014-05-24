@@ -79,7 +79,7 @@
 		},
 		renderEdit: function (itch) {
 			// <textarea name="content" rows="10"></textarea>
-			render(itch);
+			handlers.render(itch);
 		}
 	};
 	

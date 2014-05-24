@@ -8,13 +8,14 @@
 			var cssId = itch.attr('data-id') + '-css';
 			
 			var elem = $('#' + cssId);
-			if (elem.length) {
-				elem.html(itchData.data.custom_css);
-			} else {
+			if (!elem.length) {
 				elem = $('<style type="text/css">');
 				elem.attr('id', cssId);
 				$('body').append(elem);
 			}
+			
+			elem.html(itchData.data.custom_css);
+			$(itch).find('.itch-body').html('<pre><code class="language-css">' + itchData.data.custom_css + '</code></pre>');
 			
 		},
 		renderEdit: function (itch) {

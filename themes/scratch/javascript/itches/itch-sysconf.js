@@ -14,7 +14,7 @@
 			var toLoad = info.data.itches.split("\n");
 			for (var i = 0, c = toLoad.length; i < c; i++) {
 				var s = toLoad[i];
-				if (!loadedScripts[s]) {
+				if (!loadedScripts[s] && s.length) {
 					loadedScripts[s] = true;
 					Scratch.loadScript(s).done(function () {
 						itch.find('.itch-body').prepend("<p>Loaded " + this.url + '</p>');
@@ -27,7 +27,7 @@
 			var toLoad = info.data.syles.split("\n");
 			for (var i = 0, c = toLoad.length; i < c; i++) {
 				var s = toLoad[i];
-				if (!loadedScripts[s]) {
+				if (!loadedScripts[s] && s.length) {
 					loadedScripts[s] = true;
 					Scratch.loadCss(s);
 					itch.find('.itch-body').prepend("<p>Loaded " + s + '</p>');

@@ -9,16 +9,16 @@
 	var ITCH_CLASS = 'itch';
 
 	var CONTAINER = '.panzoom';
-	
+
 	var scratchStore = null;
-	
+
 	/**
 	 * A list of all the itches that users can create
 	 * 
 	 * @type object
 	 */
 	var itchTypes = {};
-	
+
 	/**
 	 * A list of wrappers for various itches. Not all types have
 	 * a wrapper so there's a default provided
@@ -26,8 +26,8 @@
 	 * @type object
 	 */
 	var itchWrappers = {};
-	
-	var defaultWrapper = function (itchData) {
+
+	var defaultWrapper = function(itchData) {
 		this.itchData = itchData;
 	};
 
@@ -60,7 +60,7 @@
 		if (state) {
 			this.state = state;
 		}
-		
+
 		if (!this.state.scratchId) {
 			this.state.scratchId = Scratch.GUID();
 		}
@@ -96,8 +96,8 @@
 		scratchStore.save('scratch_state', this.state);
 		scratchStore.save('itches', this.ALL_ITCHES);
 	};
-	
-	Scratch.forExport = function () {
+
+	Scratch.forExport = function() {
 		return {
 			itches: this.ALL_ITCHES
 		};
@@ -122,14 +122,14 @@
 
 		this.save();
 	};
-	
+
 	/**
 	 * Get the state of things for a particular value
 	 * 
 	 * @param string option
 	 * @returns mixed
 	 */
-	Scratch.getState = function (option) {
+	Scratch.getState = function(option) {
 		return this.state[option];
 	}
 
@@ -139,7 +139,7 @@
 	 * @param object typeInfo
 	 * @returns void
 	 */
-	Scratch.registerType = function (typeInfo) {
+	Scratch.registerType = function(typeInfo) {
 		itchTypes[typeInfo.type] = typeInfo;
 	};
 
@@ -154,30 +154,30 @@
 	 *			Scratch.wrap(itchData) is called
 	 * @returns {undefined}
 	 */
-	Scratch.addWrapper = function (type, ctor) {
+	Scratch.addWrapper = function(type, ctor) {
 		itchWrappers[type] = ctor;
-		
+
 	};
-	
+
 	/**
 	 * Wrap an itch data wrapper. 
 	 * 
 	 * @param object itchData
 	 * @returns object
 	 */
-	Scratch.wrap = function (itchData) {
+	Scratch.wrap = function(itchData) {
 		var type = itchData.type;
 		if (!type) {
 			throw "Attempted to wrap invalid itch data";
 		}
-		
+
 		var ctor = itchWrappers[type];
 		if (!ctor) {
 			ctor = defaultWrapper;
 		}
-		
+
 		var wrapped = new ctor(itchData);
-		
+
 		return wrapped;
 	}
 
@@ -219,8 +219,8 @@
 				left: parseInt($(relativeElem).css('left')),
 			}
 			// horrible hack to determine a y/x position relative to origin
-			
-			
+
+
 			var relativeToOrigin = relativeElem.attr('id').split('_');
 			var relTop = parseInt(relativeToOrigin[0]);
 			var relLeft = parseInt(relativeToOrigin[1]);
@@ -250,7 +250,7 @@
 
 				// make sure it's absolute again if coming off the pinned list
 				dropped.css('position', 'absolute');
-				
+
 				var currentParent = $(dropped.parent());
 
 				if (currentParent[0] !== this) {
@@ -362,7 +362,7 @@
 			})
 			.addClass('itch-type-' + type).addClass('initialising');
 
-		
+
 		itch.append('<div class="itch-handle"></div>')
 			.append('<div class="itch-options">...</div>')
 			.append('<div class="itch-body-wrap"><div class="itch-body"></div></div>');
@@ -396,9 +396,8 @@
 		var createNew = false;
 		if (!existingData) {
 			createNew = true;
-			
+
 			existingData = {
-				
 				tile: $(to).attr('id'),
 				position: pos,
 				type: type,
@@ -409,15 +408,15 @@
 				data: {}
 			};
 		}
-		
+
 		if (!existingData.id) {
 			existingData.id = this.nextItchId();
 		}
-		
+
 		if (!existingData.guid) {
 			existingData.guid = Scratch.GUID();
 		}
-		
+
 		if (!existingData.scratchId) {
 			existingData.scratchId = this.state.scratchId;
 		}
@@ -426,7 +425,7 @@
 		itch.data('itch', existingData);
 		itch.attr('data-id', existingData.guid);
 
-		
+
 		if (existingData.options.title) {
 			itch.attr('title', existingData.options.title);
 			itch.find('.itch-handle').text(existingData.options.title);
@@ -438,7 +437,7 @@
 		} else {
 			$(itch).trigger('itchRestored');
 		}
-		
+
 		// now if it was pinned...
 		if (existingData.options.pinned) {
 			this.pinItch(itch);
@@ -450,11 +449,11 @@
 	Scratch.getItch = function(guid) {
 		return this.ALL_ITCHES[guid];
 	};
-	
+
 	Scratch.$getItch = function(guid) {
 		return $('.itch[data-id=' + guid + ']');
 	};
-	
+
 	Scratch.deleteItch = function(guid) {
 		var elem = this.$getItch(guid);
 		if (elem.length) {
@@ -464,15 +463,15 @@
 			this.save();
 		}
 	};
-	
-	Scratch.pinItch = function (itch) {
+
+	Scratch.pinItch = function(itch) {
 		itch.css({
 			'position': 'static',
 			'width': 'auto',
 			'height': '20px'
 		});
 		$('#pinned-itches').append(itch);
-		
+
 		itch.data('itch').options.pinned = true;
 
 		Scratch.save();
@@ -499,21 +498,21 @@
 	Scratch.currentTransform = function() {
 		return zoomer.panzoom('getMatrix');
 	};
-	
+
 	/**
 	 * Pan to a specific itch object
 	 * 
 	 * @param object itch
 	 * @returns null
 	 */
-	Scratch.panToItch = function (itch) {
+	Scratch.panToItch = function(itch) {
 		var top = parseInt(itch.parent().css('top'));
 		var left = parseInt(itch.parent().css('left'));
 
 		itch.trigger('requestFocus');
 	}
-	
-	Scratch.pan = function (x, y) {
+
+	Scratch.pan = function(x, y) {
 		zoomer.panzoom('pan', x, y);
 	}
 
@@ -576,29 +575,29 @@
 			$(this).removeClass('selected-itch');
 		})
 	};
-	
+
 	/**
 	 * Provides skeleton functionality for 
 	 * 
 	 * @param {type} type
 	 * @returns {undefined}
 	 */
-	Scratch.prepareItchType = function (type, handlers) {
+	Scratch.prepareItchType = function(type, handlers) {
 		var typeClass = '.itch-type-' + type;
-		$(document).on('itchCreated', typeClass, function () {
+		$(document).on('itchCreated', typeClass, function() {
 			$(this).removeClass('initialising');
 			if (handlers.onCreate) {
 				handlers.onCreate($(this));
 			}
 			handlers.renderEdit($(this));
 		});
-		
-		$(document).on('itchRestored', typeClass, function () {
+
+		$(document).on('itchRestored', typeClass, function() {
 			$(this).removeClass('initialising');
 			handlers.render($(this));
 		});
 
-		$(document).on('renderItch', typeClass, function () {
+		$(document).on('renderItch', typeClass, function() {
 			// ensure position is correct
 			var itchData = $(this).data('itch');
 			$(this).css({
@@ -610,7 +609,7 @@
 			handlers.render($(this));
 		});
 
-		$(document).on('click', typeClass + ' .itch-handle', function () {
+		$(document).on('click', typeClass + ' .itch-handle', function() {
 			var itch = $(this).parents('.itch');
 			if (itch.find('.itchForm').length > 0) {
 				handlers.render(itch);
@@ -624,7 +623,7 @@
 		}
 	};
 
-	
+
 	/**
 	 * 
 	 * @param jqueryelement itch
@@ -702,38 +701,38 @@
 			if (renderAfterSave) {
 				$(itch).trigger('renderItch');
 			}
-			
+
 			return false;
 		});
 	};
-	
+
 	/**
 	 * Load an external script file
 	 * 
 	 * @param string src
 	 * @returns jqXHR
 	 */
-	Scratch.loadScript = function (src) {
+	Scratch.loadScript = function(src) {
 		return $.getScript(src);
 	};
-	
+
 	/**
 	 * Load an external CSS File
 	 * 
 	 * @param string css
 	 * @returns {undefined}
 	 */
-	Scratch.loadCss = function (css) {
+	Scratch.loadCss = function(css) {
 		var elem = $('<link>');
 		elem.attr({
-			rel:  "stylesheet",
+			rel: "stylesheet",
 			type: "text/css",
 			href: css
 		});
-		
+
 		$('head').append(elem);
 	};
-	
+
 	/**
 	 * Call in a $(function () {}); block inside an externally 
 	 * loaded script to ensure that elements it provides functionality
@@ -742,8 +741,8 @@
 	 * @param string type
 	 * @returns null
 	 */
-	Scratch.typeLoaded = function (type) {
-		$('.itch-type-' + type + '.initialising').each (function () {
+	Scratch.typeLoaded = function(type) {
+		$('.itch-type-' + type + '.initialising').each(function() {
 			$(this).trigger('itchRestored');
 		})
 	}
@@ -761,12 +760,12 @@
 	var S4 = function() {
 		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 	}
-	
+
 	Scratch.GUID = function() {
 		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 	}
-	
-	Scratch.clone = function (data) {
+
+	Scratch.clone = function(data) {
 		var cloned = JSON.stringify(data);
 		return JSON.parse(cloned);
 	}
@@ -775,10 +774,10 @@
 	$(document).on('renderItch itchRestored', '.itch', function() {
 		var itch = $(this);
 		var data = $(this).data('itch');
-		
+
 		if (data.options.labels && data.options.labels.length) {
 			var allLabels = data.options.labels.split(',');
-			$(allLabels).each(function () {
+			$(allLabels).each(function() {
 				itch.addClass('label-' + $.trim(this));
 			})
 		}
@@ -820,12 +819,12 @@
 
 		zoomer.parent().on('mousewheel.focal', function(e) {
 			var target = $(e.target);
-			
+
 			// only if we're actually moving a base tile
 			if (!target.is('.basictile')) {
 				return;
 			}
-			
+
 			lastZoom = e;
 			e.preventDefault();
 			var delta = e.delta || e.originalEvent.wheelDelta;
@@ -838,8 +837,8 @@
 
 			Scratch.updateState('current_transform', Scratch.currentTransform());
 		});
-		
-		$(document).on('requestFocus', function (event) {
+
+		$(document).on('requestFocus', function(event) {
 //			
 //			zoomer.panzoom('zoom', 1, {
 //				increment: 0.1,
@@ -847,7 +846,7 @@
 //				focal: event
 //			});
 		});
-		
+
 		$(zoomer).on('touchstart mouseover', '.itch', function() {
 			zoomer.panzoom('disable');
 		});
@@ -876,18 +875,18 @@
 				Scratch.closeItches();
 			}
 		});
-		
+
 		$(document).on('click', '.itch', function(e) {
 			$('.topitch').removeClass('topitch');
 			$(this).addClass('topitch');
-			
+
 			if (!e.ctrlKey) {
 				$('.selected-itch').removeClass('selected-itch');
 			}
 			$(this).addClass('selected-itch');
 		});
-		
-		$(document).on('optionsUpdate', '.itch', function () {
+
+		$(document).on('optionsUpdate', '.itch', function() {
 			var itch = $(this);
 			var data = itch.data('itch');
 			itch.attr('title', data.options.title);
@@ -939,7 +938,7 @@
 				position: offsetPos
 			};
 		});
-		
+
 		/** MENU GENERATION STUFF */
 		var defaultGeneralMenu = {
 			"itch": {
@@ -952,12 +951,12 @@
 				name: 'Options',
 				execute: function(options) {
 					var itch = $(this);
-					
+
 					var elems = [
 						{
-							"name" : "title",
-							"caption" : "Title",
-							"type" : "text"
+							"name": "title",
+							"caption": "Title",
+							"type": "text"
 						},
 //						{
 //							"name" : "fontColor",
@@ -970,29 +969,27 @@
 //							"type" : "color"
 //						},
 						{
-							"name" : "labels",
-							"caption" : "Labels (comma separated)",
-							"type" : "text"
+							"name": "labels",
+							"caption": "Labels (comma separated)",
+							"type": "text"
 						},
 						{
-							"type" : "submit",
-							"value" : "Update"
+							"type": "submit",
+							"value": "Update"
 						}
 					];
 
-					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, null, function (form, data) {
+					Scratch.editForm(itch, elems /*'#GeneralSettingsForm'*/, null, function(form, data) {
 						itch.trigger('optionsUpdate');
 					}, 'options');
 				}
 			},
-			
 			'pin': {
 				name: "Pin",
-				execute: function (o) {
+				execute: function(o) {
 					Scratch.pinItch($(this));
 				}
 			},
-
 			"delete": {
 				name: "Delete",
 				execute: function(o) {
@@ -1013,9 +1010,12 @@
 		};
 
 		// Initialise and boot away
-		
+		var store = urlParam('s');
+		if (!store) {
+			store = 'Default';
+		}
 		// ugly hack for now...
-		Scratch.setStore(new LocalDataStore());
+		Scratch.setStore(new LocalDataStore(store));
 		Scratch.init();
 
 		// aannndd some post init stuff that hasn't been cleaned up yet...
@@ -1029,7 +1029,7 @@
 				selector: '.basictile',
 				build: function(trigger, e) {
 					var items = $.extend(true, {}, defaultGeneralMenu);
-					
+
 					// add any specific ones in
 					$(document).trigger('updateGeneralMenu', items);
 
@@ -1056,7 +1056,7 @@
 					var itchElem = $(trigger).parents('.itch');
 
 					var items = $.extend(true, {}, defaultOptionsMenu);
-					
+
 					// add any specific ones in
 					itchElem.trigger('updateItemOptionMenu', items);
 
@@ -1068,6 +1068,21 @@
 			});
 		}, 1000);
 	});
-	
+
+	function urlParam(sParam) {
+		var sPageURL = window.location.search.substring(1);
+		var sURLVariables = sPageURL.split('&');
+		for (var i = 0; i < sURLVariables.length; i++)
+		{
+			var sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == sParam)
+			{
+				return sParameterName[1];
+			}
+		}
+	}
+
 })(jQuery);
+
+
 

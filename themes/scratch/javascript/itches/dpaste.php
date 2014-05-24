@@ -30,7 +30,13 @@ if ($action == 'create') {
 	if (!isset($_REQUEST['paste'])) {
 		throw new Exception ("'paste' ID not supplied");
 	}
-	$id = filter_var($_REQUEST['paste'], FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/[a-zA-Z0-9]+/")));
+	
+	$id = trim($_REQUEST['paste'], '/');
+	if (strpos($id, '://')) {
+		$id = substr($id, strrpos($id, '/'));
+	}
+	
+	$id = filter_var($id, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/[a-zA-Z0-9]+/")));
 	if (!$id) {
 		throw new Exception("Invalid ID passed");
 	}
