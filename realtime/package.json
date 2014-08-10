@@ -1,0 +1,8 @@
+{
+  "name" : "scratch-realtime",
+  "version" : "0.0.1",
+  "main" : "realtime.js",
+  "dependencies": {
+      "socket.io": "1.0.*"
+  }
+}
