@@ -412,6 +412,10 @@
 		if (!existingData.id) {
 			existingData.id = this.nextItchId();
 		}
+		
+		if (!existingData.created) {
+			existingData.created = (new Date()).getTime();
+		}
 
 		if (!existingData.guid) {
 			existingData.guid = Scratch.GUID();
@@ -691,6 +695,7 @@
 				}
 			}
 
+			itchData.edited = (new Date()).getTime();
 			Scratch.save();
 
 			submitter.remove();
