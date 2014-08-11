@@ -5,11 +5,12 @@ io.set('transports', ['websocket', 'flashsocket']);
 
 
 var connect = function (socket) {
+	console.log("Client connected");
 	socket.on('disconnect', disconnect);
 };
 
 var disconnect = function () {
-	
+	console.log("Client disconnected");
 };
 
 io.on('connection', connect);
