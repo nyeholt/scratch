@@ -702,6 +702,8 @@
 			delete submitter;
 			delete itchData;
 			delete form;
+			
+			$(itch).trigger('itchUpdated');
 
 			if (renderAfterSave) {
 				$(itch).trigger('renderItch');

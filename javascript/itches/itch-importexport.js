@@ -82,7 +82,6 @@
 			restoreItch(restored);
 		}
 	};
-	
 
 	$(document).on('updateGeneralMenu', function (e, items) {
 		items[type] = { name: "Import / Export" };
@@ -120,5 +119,4 @@
 	});
 
 	Scratch.prepareItchType(type, {render: render, renderEdit: renderEdit});
-	
 })(jQuery);

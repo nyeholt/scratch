@@ -28,12 +28,12 @@
 		var itchData = itch.data('itch');
 		var body = itch.find('.itch-body');
 		body.empty();
-
+		
 		if (!loaded) {
 			body.html('Connecting to google drive...');
 			checkAuth();
 		} else {
-			if (itchData.data.filename || itchData.data.fileId) {
+			if (itchData && itchData.data && (itchData.data.filename || itchData.data.fileId)) {
 				body.append('Saving to ' + itchData.data.filename + ' (#' + itchData.data.fileId + ')');
 				body.append('<button class="save-to-drive">Save to Drive</button>');
 			}
