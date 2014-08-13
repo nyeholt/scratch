@@ -561,6 +561,14 @@
 		for (var key in object) {
 			data[key] = object[key];
 		}
+
+		for (var key in data) {
+			if (!object[key]) {
+				// unset it in the data set
+				data[key] = null;
+			}
+		}
+		
 //		inputs.each(function() {
 //			data[this.name] = $(this).val();
 //		})
@@ -668,6 +676,9 @@
 					'html': templateId
 				};
 			}
+
+			$(itch).trigger('update' + propertySet + 'form', templateId);
+
 			var o = itch.find('.itch-body').empty().dform(templateId);
 			form = itch.find('.itchForm');
 		}
@@ -702,7 +713,7 @@
 			delete submitter;
 			delete itchData;
 			delete form;
-			
+
 			$(itch).trigger('itchUpdated');
 
 			if (renderAfterSave) {

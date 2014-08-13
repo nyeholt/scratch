@@ -7,15 +7,18 @@
 		render: function (itch) {
 			// check if markdown is loaded yet
 			var body = itch.find('.itch-body');
+			var info = itch.data('itch');
+			
 			body.empty();
 			if (typeof io == 'undefined') {
 				body.append('<h3>Offline - could not load socket.io</h3>');
+			} else if (!sockets[info.data.remote]) {
+				bindSocket(info, itch);
+				body.append("<p>Connecting to " + info.data.remote + "</p>");
 			} else {
-				var info = itch.data('itch');
-				bindSocket(info);
 				body.append("<p>Connected to " + info.data.remote + "</p>");
-//				body.append('<button class="send-updates">Send updates</button>');
-//				body.append('<button class="get-updates">Get updates</button>');
+				body.append('<p>Your ID: ' + Scratch.getState('scratchId') + '</p>');
+				
 			}
 		},
 		renderEdit: function (itch) {
@@ -27,9 +30,9 @@
 					caption: 'Remote server'
 				},
 				{
-					type: 'textarea',
-					name: 'listenTo',
-					caption: 'Take data from'
+					type: 'text',
+					name: 'sendTo',
+					caption: 'Those allowed to access your data'
 				},
 				{
 					type: 'submit',
@@ -39,16 +42,18 @@
 			Scratch.editForm(itch, elems, null, function () {
 				var info = itch.data('itch');
 				bindSocket(info);
+				registerListeners(info);
 			});
 		}
 	};
-	
+
 	$(document).on('itchUpdated', function (e) {
 		var data = $(e.target).data('itch');
-		
-		// send on all sockets
-		for (var url in sockets) {
-			sockets[url].emit("itchUpdate", data);
+		if (data.options.pushRemote) {
+			// send on all sockets
+			for (var url in sockets) {
+				sockets[url].emit("itchUpdate", data);
+			}
 		}
 	});
 
@@ -56,10 +61,46 @@
 		items[type] = {name: "Collab"};
 	});
 	
-	var bindSocket = function (info) {
+	$(document).on('updateoptionsform', function (e, form) {
+		if (form && form.html) {
+			var i = 0;
+			for (i in form.html) {
+				var type = form.html[i].type;
+				if (type == 'button' || type == 'submit') {
+					break;
+				}
+			}
+			
+			form.html.splice(i, 0, {
+				name: 'pushRemote',
+				caption: 'Push this itch',
+				type: 'checkbox'
+			})
+		}
+	});
+	
+	var bindSocket = function (info, itch) {
 		if (info.data.remote && info.data.remote.length > 0 && !sockets[info.data.remote]) {
+			info.data.connected = false;
 			var socket = io(info.data.remote, {transports:['websocket', 'flashsocket'] });
-			sockets[info.data.remote] = socket;
+			
+			socket.on('connect_error', function() {
+				info.data.connected = false;
+				console.log('connection error');
+			});
+
+			socket.on('connect', function () {
+				sockets[info.data.remote] = socket;
+				info.data.connected = true;
+				
+				socket.emit('register', {me: Scratch.getState('scratchId')});
+
+				registerListeners(info);
+				
+				if (itch) {
+					handlers.render(itch);
+				}
+			})
 			
 			socket.on('itchUpdate', function (data) {
 				if (data.type == type) {
@@ -70,6 +111,19 @@
 		}
 	};
 	
+	var registerListeners = function (info) {
+		var scratchId = Scratch.getState('scratchId');
+		var socket = socketFor(info);
+		
+		if (socket && info.data.sendTo && info.data.sendTo.length) {
+			var sendTo = info.data.sendTo.replace(' ', '').split(',');
+			
+			console.log(sendTo);
+			
+			socket.emit('registerListeners', {me: scratchId, list: sendTo});
+		}
+	}
+
 	var socketFor = function(info) {
 		if (info.data.remote && info.data.remote.length > 0 && sockets[info.data.remote]) {
 			return sockets[info.data.remote];
@@ -82,7 +136,7 @@
 		$('.itch-type-realtime').each(function () {
 			var itch = $(this);
 			handlers.render(itch);
-		})
+		});
 //		io.set('transports', ['websocket', 'flashsocket']);
 //		var socket = io('http://127.0.0.1:3000', {transports:['websocket', 'flashsocket'] });
 

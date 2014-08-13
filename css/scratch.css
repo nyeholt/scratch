@@ -175,6 +175,12 @@ Overrides
 	padding: 3px 0px;
 }
 
+.itch .ui-dform-checkbox {
+	float: right;
+	width: auto;
+	margin-right: 20px;
+}
+
 .itch .ui-dform-div {
 	margin-bottom: 5px;
 }
