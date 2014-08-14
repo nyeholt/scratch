@@ -151,7 +151,7 @@
 							headers: {'Authorization': 'Bearer ' + gapi.auth.getToken().access_token }
 						}
 					).then(function (data) {
-						$(document).trigger('loadItches', data);
+						Scratch.loadItches(data);
 					});
 				}
 			} else if (resp.error.code == 401) {

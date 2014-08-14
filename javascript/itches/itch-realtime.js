@@ -106,7 +106,7 @@
 				if (data.type == type) {
 					return;
 				}
-				$(document).trigger('loadItch', data);
+				Scratch.loadItch(data);
 			})
 		}
 	};

@@ -429,6 +429,8 @@
 		itch.data('itch', existingData);
 		itch.attr('data-id', existingData.guid);
 
+		var sourceId = 'source-' + itchData.scratchId;
+		itch.addClass(sourceId);
 
 		if (existingData.options.title) {
 			itch.attr('title', existingData.options.title);
@@ -448,6 +450,53 @@
 		}
 
 		return itch;
+	};
+	
+	/**
+	 * Loads an itch into place based on an object representation of that itch
+	 * 
+	 * @param object itchData
+	 * @returns object
+	 */
+	Scratch.loadItch = function (itchData) {
+		if (itchData.guid) {
+			if (itchData.id) {
+				delete itchData.id;
+			}
+
+			var existing = this.getItch(itchData.guid);
+			
+			var itch = null;
+			if (existing) {
+				// don't change its position
+				delete itchData.position;
+				$.extend(existing, itchData);
+				itch = this.$getItch(itchData.guid);
+				itch.trigger('optionsUpdate');
+				itch.trigger('renderItch');
+			} else {
+				itch = this.addItch(itchData);
+			}
+
+			
+			return itch;
+		}
+	};
+	
+	/**
+	 * Load a set of itch data
+	 * 
+	 * @param Array itches
+	 * @returns Array
+	 */
+	Scratch.loadItches = function (itches) {
+		var loaded = [];
+		if (itches && itches.itches) {
+			for (var guid in itches.itches) {
+				loaded.push(this.loadItch(itches.itches[guid]));
+			}
+		}
+		return loaded;
 	};
 
 	Scratch.getItch = function(guid) {

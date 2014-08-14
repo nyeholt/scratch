@@ -1,32 +1,6 @@
 ;(function ($) {
 	var type = 'importexport';
 	var typeClass = '.itch-type-' + type;
-	
-	/**
-	 * Restore an itch from an object
-	 * 
-	 * @param object restoredObject
-	 * @returns 
-	 */
-	var restoreItch = function (restoredObject) {
-		if (restoredObject.guid) {
-			if (restoredObject.id) {
-				delete restoredObject.id;
-			}
-
-			var existing = Scratch.getItch(restoredObject.guid);
-			if (existing) {
-				// don't change its position
-				delete restoredObject.position;
-				$.extend(existing, restoredObject);
-				var itch = Scratch.$getItch(restoredObject.guid);
-				itch.trigger('optionsUpdate');
-				itch.trigger('renderItch');
-			} else {
-				Scratch.addItch(restoredObject);
-			}
-		}
-	};
 
 	var render = function (itch) {
 		var itchData = itch.data('itch');
@@ -79,7 +53,7 @@
 		var data = $(this).siblings('textarea').val();
 		if (data) {
 			var restored = JSON.parse(Base64.decode(data));
-			restoreItch(restored);
+			Scratch.loadItch(restored);
 		}
 	};
 
@@ -103,18 +77,6 @@
 					saveTo.val(encoded);
 				}
 			};
-		}
-	});
-	
-	$(document).on('loadItch', function (e, itchData) {
-		restoreItch(itchData);
-	});
-	
-	$(document).on('loadItches', function (e, itches) {
-		if (itches && itches.itches) {
-			for (var guid in itches.itches) {
-				restoreItch(itches.itches[guid]);
-			}
 		}
 	});
 

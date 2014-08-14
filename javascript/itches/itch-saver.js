@@ -72,27 +72,6 @@
 			updateTimer = setInterval(scratchUpdates, itchData.data.saveFrequency * 1000);
 		}
 	}
-	
-	/**
-	 * Restore an itch from an object
-	 * 
-	 * @param object restoredObject
-	 * @returns 
-	 */
-	var restoreItch = function (restoredObject) {
-		if (restoredObject.guid) {
-			var existing = Scratch.getItch(restoredObject.guid);
-			if (existing) {
-				// don't change its position
-				delete restoredObject.position;
-				$.extend(existing, restoredObject);
-				var itch = Scratch.$getItch(restoredObject.guid);
-				itch.trigger('renderItch');
-			} else {
-				Scratch.addItch(restoredObject);
-			}
-		}
-	};
 
 	var render = function (itch) {
 		var itchData = itch.data('itch');

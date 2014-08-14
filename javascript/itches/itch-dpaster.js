@@ -70,7 +70,7 @@
 						for (var guid in data.body) {
 							var loadedData = data.body[guid];
 							if (loadedData.guid && loadedData.type) {
-								$(document).trigger('loadItch', loadedData);
+								Scratch.loadItch(loadedData);
 							}
 						}
 					}
