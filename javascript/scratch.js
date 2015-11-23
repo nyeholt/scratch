@@ -429,7 +429,7 @@
 		itch.data('itch', existingData);
 		itch.attr('data-id', existingData.guid);
 
-		var sourceId = 'source-' + itchData.scratchId;
+		var sourceId = 'source-' + existingData.scratchId;
 		itch.addClass(sourceId);
 
 		if (existingData.options.title) {
