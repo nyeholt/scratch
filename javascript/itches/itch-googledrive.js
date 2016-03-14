@@ -7,10 +7,11 @@
 		'https://www.googleapis.com/auth/userinfo.email',
 		'https://www.googleapis.com/auth/userinfo.profile',
 	];
+
 	var loaded = false;
 	var saving = false;
-	var CLIENT_ID = '648508991340-ombe7mil8679dbvl6udho62ofc2t2nt0.apps.googleusercontent.com';
-	var API_KEY = 'AIzaSyCtJdN4VSF1PnqJy3_ynLYEdTVTMpfNboQ';
+	var CLIENT_ID = '';
+	var API_KEY = '';
 
 	var picker;
 
