@@ -7,11 +7,10 @@
 		'https://www.googleapis.com/auth/userinfo.email',
 		'https://www.googleapis.com/auth/userinfo.profile',
 	];
-
 	var loaded = false;
 	var saving = false;
-	var CLIENT_ID = '';
-	var API_KEY = '';
+	var CLIENT_ID = '648508991340-bv6m3t53o4n2nggojn8h3av1gonqd7rh.apps.googleusercontent.com';
+	var API_KEY = 'IQBb43juV9iZGnQydklcEoVB';
 
 	var picker;
 
@@ -142,7 +141,7 @@
 		var request = gapi.client.drive.files.get({
 			'fileId': googleMetadata.id
 		});
-
+		
 		request.execute(function(resp) {
 			if (!resp.error) {
 				if (resp.downloadUrl) {
@@ -252,6 +251,9 @@
 	}
 
 	function checkAuth() {
+		if (typeof gapi == 'undefined') {
+			return;
+		}
 		gapi.auth.authorize({
 			'client_id': CLIENT_ID,
 			'scope': SCOPES.join(' '),
@@ -260,7 +262,8 @@
 	}
 
 	function handleAuthResult(authResult) {
-		if (authResult) {
+		if (authResult && !authResult.error) {
+			console.log(authResult);
 			// Access token has been successfully retrieved, requests can be sent to the API
 			loaded = true;
 			gapi.client.load('drive', 'v2', function() {
@@ -271,14 +274,13 @@
 					render(itch);
 				}
 			});
-
+			
+			console.log("setting auth to " + authResult.access_token);
 			gapi.load('picker', {'callback': function() {
 					picker = new google.picker.PickerBuilder().
 						addView(google.picker.ViewId.DOCS).
 						setOAuthToken(authResult.access_token).
-						setDeveloperKey(API_KEY).
 						build();
-//				picker.setVisible(true);
 				}});
 
 		} else {
@@ -328,9 +330,7 @@
 		request.execute(callback);
 	}
 
-	Scratch.loadScript("https://apis.google.com/js/client.js?onload=googleClientLoad").done(function() {
-
-	});
+	Scratch.loadScript("https://apis.google.com/js/client.js?onload=googleClientLoad").done(function() {});
 	
 	
 	Scratch.prepareItchType(type, {render: render, renderEdit: renderOptions});
