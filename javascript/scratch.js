@@ -7,6 +7,7 @@
 	var $TILE_CLASS = '.' + TILE_CLASS;
 
 	var ITCH_CLASS = 'itch';
+	var $ITCH_CLASS = '.' + ITCH_CLASS;
 
 	var CONTAINER = '.panzoom';
 
@@ -69,6 +70,15 @@
 	};
 
 	Scratch.init = function() {
+		$($ITCH_CLASS).remove();
+		$($TILE_CLASS).remove();
+		
+		delete this.ALL_ITCHES;
+		delete this.ALL_TILES;
+		
+		this.ALL_ITCHES = {};
+		this.ALL_TILES = {};
+		
 		if (!scratchStore) {
 			alert("No storage specified");
 		}

@@ -32,7 +32,7 @@
 				},
 				{
 					'name': 'newStore',
-					'caption': "New store name",
+					'caption': "New scratch",
 					"type": "text"
 				},
 				{
@@ -57,7 +57,12 @@
 				if (to && to.length > 0) {
 					if (to != current) {
 						// create a new store... ?
-						location.href = Scratch.currentUrl() + '?s=' + encodeURIComponent(to);
+						Scratch.start(to);
+						var newUrl = Scratch.currentUrl() + '?s=' + encodeURIComponent(to);
+						if (window.history) {
+							window.history.pushState({}, to, newUrl);
+						}
+						
 					}
 				}
 			});

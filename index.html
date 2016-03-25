@@ -24,7 +24,6 @@
 		<script src="javascript/scratch-local-storage.js"></script>
 		
 		<script src="javascript/itches/itch-sysconf.js"></script>
-		
 		<script src="javascript/itches/itch-text.js"></script>
 		
 		<!--<script src="javascript/itches/itch-embed.js"></script>-->
@@ -35,6 +34,27 @@
 		<link rel="stylesheet" href="javascript/jquery-context/jquery.contextMenu.css" />
 	</head>
 	<body>
+		<script type="text/javascript">
+			var scratch_defaults = {
+				"scratches": [
+					{
+						type: 'sysconf',
+						data: {
+							
+						}
+					},
+					{
+						type: 'switcher',
+					},
+					{
+						type: 'itch',
+						data: {
+							content: 'Well done!'
+						}
+					}
+				]
+			};
+		</script>
 		<div id="controls">
 			<div id="zoomcontrols">
 			<button id="zoomout" value="-">-</button><button id="resetzoom">0</button><button id="zoomin" value="+">+</button>
