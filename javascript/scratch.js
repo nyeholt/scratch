@@ -44,12 +44,29 @@
 	Scratch.setStore = function(store) {
 		scratchStore = store;
 	}
+	
+	Scratch.getStorePrefix = function () {
+		return scratchStore.prefix.substr(0, scratchStore.prefix.length - 1);
+	}
 
 	Scratch.log = function(msg) {
 		if (console && console.log) {
 			console.log(msg);
 		}
 	}
+	
+	Scratch.start = function (withStore) {
+		// Initialise and boot away
+		if (!withStore) {
+			withStore = urlParam('s');
+		}
+		if (!withStore) {
+			withStore = 'Default';
+		}
+		// ugly hack for now...
+		Scratch.setStore(new LocalDataStore(withStore));
+		Scratch.init();
+	};
 
 	Scratch.init = function() {
 		if (!scratchStore) {
@@ -836,6 +853,15 @@
 		var cloned = JSON.stringify(data);
 		return JSON.parse(cloned);
 	}
+	
+	Scratch.currentUrl = function (withParams) {
+		// get the currnet URL
+		var url = location.protocol + '//' + location.host + location.pathname;
+		if (withParams) {
+			url += location.search;
+		}
+		return url;
+	};
 
 
 	$(document).on('renderItch itchRestored', '.itch', function() {
@@ -1076,14 +1102,7 @@
 			}
 		};
 
-		// Initialise and boot away
-		var store = urlParam('s');
-		if (!store) {
-			store = 'Default';
-		}
-		// ugly hack for now...
-		Scratch.setStore(new LocalDataStore(store));
-		Scratch.init();
+		Scratch.start();
 
 		// aannndd some post init stuff that hasn't been cleaned up yet...
 		setTimeout(function() {
@@ -1135,6 +1154,8 @@
 			});
 		}, 1000);
 	});
+
+	
 
 	function urlParam(sParam) {
 		var sPageURL = window.location.search.substring(1);
