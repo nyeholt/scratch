@@ -18,8 +18,6 @@
 				allScratches[current] = current;
 				localStorage.setItem(storeKey, JSON.stringify(allScratches));
 			}
-			Scratch.log(allScratches);
-			
 			var opts = {'': ''};
 			for (var opt in allScratches) {
 				opts[opt] = allScratches[opt];
