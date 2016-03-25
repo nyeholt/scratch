@@ -840,9 +840,6 @@
 	 * @returns jqXHR
 	 */
 	Scratch.loadScript = function(src) {
-		if (src.indexOf('://') < 0) {
-			src = this.currentUrl() + src;
-		}
 		return $.getScript(src);
 	};
 
