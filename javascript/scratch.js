@@ -46,6 +46,10 @@
 		scratchStore = store;
 	}
 	
+	Scratch.getStore = function () {
+		return scratchStore;
+	}
+	
 	Scratch.getStorePrefix = function () {
 		return scratchStore.prefix.substr(0, scratchStore.prefix.length - 1);
 	}
@@ -70,6 +74,8 @@
 	};
 
 	Scratch.init = function() {
+		this.loaded = false;
+		
 		$($ITCH_CLASS).remove();
 		$($TILE_CLASS).remove();
 		
@@ -93,9 +99,10 @@
 		}
 
 		var itches = scratchStore.get('itches');
+		
 		if (itches) {
 			this.ALL_ITCHES = itches;
-		}
+		} 
 
 		// see if we've got a start point
 		var startPoint = null;
@@ -113,6 +120,32 @@
 
 		if (this.state.current_transform) {
 			zoomer.panzoom('setMatrix', this.state.current_transform);
+		}
+		
+		
+		var has = false;
+		for (var anId in this.ALL_ITCHES) {
+			has = true;
+			break;
+		}
+		if (!has) {
+			// create defaults
+			if (window.scratch_defaults) {
+				for (var i = 0; i < scratch_defaults.scratches.length; i++) {
+					var newItem = scratch_defaults.scratches[i];
+					var p = (i * 50) + 50;
+					var pos = [p,p]
+					var newItch = this.addItch('0,0', pos, newItem.type);
+					if (newItem.data) {
+						var d = newItch.data('itch');
+						for (var key in newItem.data) {
+							d.data[key] = newItem.data[key];
+						}
+					}
+					$(newItch).trigger('renderItch');
+				}
+				Scratch.save();
+			}
 		}
 
 		this.loaded = true;

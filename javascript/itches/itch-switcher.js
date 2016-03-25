@@ -35,20 +35,32 @@
 					'caption': "New scratch",
 					"type": "text"
 				},
+//				{
+//					"name": "deleteScratch",
+//					"type": "checkbox",
+//					"caption": "Delete selected scratch",
+//					"value": "1"
+//				},
 				{
 					"type": "submit",
-					"value": "Change"
+					"value": "Update",
 				}
 			];
 			Scratch.editForm(itch, elems, function () {
 				
 			}, function (form, itchData) {
+				var to = itchData.data.switchTo;
+				
+				if (itchData.data.deleteScratch && to.length) {
+					delete itchData.data.deleteScratch;
+					itchData.data.switchTo = 'Default';
+				}
 				var newStore = itchData.data.newStore;
 				if (newStore && newStore.length) {
 					itchData.data.switchTo = newStore;
 				}
 				
-				var to = itchData.data.switchTo;
+				to = itchData.data.switchTo;
 				
 				itchData.data.newStore = '';
 				itchData.data.switchTo = '';
@@ -62,28 +74,13 @@
 						if (window.history) {
 							window.history.pushState({}, to, newUrl);
 						}
-						
 					}
 				}
 			});
 			
 		},
 		renderEdit: function (itch) {
-			// <textarea name="content" rows="10"></textarea>
-//			var elems = [
-//				{
-//					type: 'textarea',
-//					name: 'content',
-//					caption: 'Markdown content'
-//				},
-//				{
-//					type: 'submit',
-//					value: 'Update'
-//				}
-//			];
-//			Scratch.editForm(itch, elems, function () {
-//				itch.find('textarea').autogrow();
-//			});
+			
 		}
 	};
 	
