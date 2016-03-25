@@ -27,7 +27,7 @@
 		<script src="javascript/itches/itch-text.js"></script>
 		
 		<!--<script src="javascript/itches/itch-embed.js"></script>-->
-		<script src="javascript/itches/itch-switcher.js"></script>
+		<!--<script src="javascript/itches/itch-switcher.js"></script>-->
 		
 		<link rel="stylesheet" href="javascript/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
 		<link rel="stylesheet" href="css/scratch.css" />
@@ -38,27 +38,32 @@
 			var scratch_defaults = {
 				"scratches": [
 					{
-						type: 'sysconf',
+						type: 'systemconfig',
 						data: {
 							
 						}
 					},
 					{
-						type: 'switcher',
-					},
-					{
 						type: 'itch',
 						data: {
-							content: 'Welcome! What to do now? A few pointers.. \n\
-		* Click grey title bar of each itch to edit it\n\
-		* Drag and drop where-ever you want it\n\
-		* Click the 0 in the top right to go back to the centrepoint\n\
-        * Right click outside everywhere to select new itches to create\n\
+							content: 'Okay! What to do now? A few pointers.. \n\
+\n\
+* Click the grey title bar of each itch to edit it\n\
+* Drag and drop where-ever you want it\n\
+* Click the 0 in the top right to go back to the centrepoint\n\
+* Right click outside everywhere to select new itches to create\n\
 \n\
 More functionality can be added by including other itches from the systemconfig itch; just paste in the url to that new itch \n\
-and it\'ll load into place. Some examples are '
-							
-							
+and it\'ll load into place. Some examples are \n\
+\n\
+* javascript/itches/itch-embed.js\n\
+* javascript/itches/itch-rss.js\n\
+* javascript/itches/itch-themer.js\n\
+* javascript/itches/itch-switcher.js\n\
+* javascript/itches/itch-googledrive.js\n\
+\n\
+\n\
+But that\'s raw JS you\'re asking me to include? Well, yes - but _you_ get to chose which JS that is. I never said it was a good idea...' 
 						}
 					}
 				]

@@ -38,8 +38,6 @@
 		if (info.data.scratch_title) {
 			$('title').text(info.data.scratch_title);
 		}
-
-		
 	};
 	
 	var renderOptions = function (itch) {
