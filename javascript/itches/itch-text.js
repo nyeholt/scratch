@@ -31,7 +31,9 @@
 				}
 			];
 			Scratch.editForm(itch, elems, function () {
-				itch.find('textarea').autogrow();
+				if ($.fn.autogrow) {
+					itch.find('textarea').autogrow();
+				}
 			});
 		}
 	};
